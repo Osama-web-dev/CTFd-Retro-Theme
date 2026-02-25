@@ -197,23 +197,7 @@ def setup():
                 set_config("ctf_banner", f.location)
 
             # Splice in Episode Zero hero content
-            index = """<style>
-.episode-zero-hero{min-height:85vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 20px;position:relative;z-index:10;}
-.hero-inner{max-width:900px;background:rgba(30,26,22,0.88);border:1px solid #3b2a1e;padding:60px 40px;backdrop-filter:blur(6px);box-shadow:0 0 0 1px rgba(196,169,98,0.06),0 20px 60px rgba(0,0,0,0.6);position:relative;}
-.hero-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,169,98,0.5),transparent);}
-.ez-title{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2.4rem,7vw,4rem);font-weight:900;letter-spacing:6px;color:#f4ead5;text-shadow:0 4px 12px rgba(0,0,0,0.9);margin:0;}
-.ez-subtitle{font-family:'Special Elite',Georgia,serif;font-size:clamp(1rem,3vw,1.5rem);margin-top:10px;color:#c4a962;letter-spacing:0.1em;}
-.ez-tagline{font-style:italic;margin-top:8px;color:rgba(244,234,213,0.6);font-size:.95rem;}
-.ez-divider{width:80px;height:2px;background:linear-gradient(90deg,transparent,#c4a962,transparent);margin:30px auto;}
-.ez-content p{margin-bottom:18px;color:rgba(244,234,213,0.85);line-height:1.8;font-size:.95rem;}
-.ez-final-line{margin-top:30px !important;font-family:'Special Elite',Georgia,serif;font-size:1.05rem;color:#c56a2d !important;text-shadow:0 0 8px rgba(197,106,45,0.3);}
-.ez-cta{margin-top:36px;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
-.ez-button{display:inline-block;padding:12px 32px;border:1px solid #c4a962;color:#c4a962;font-family:'Special Elite',Georgia,serif;letter-spacing:.12em;text-decoration:none;background:rgba(196,169,98,0.06);transition:all .3s ease;font-size:.9rem;}
-.ez-button:hover{background:#c4a962;color:#12100e;box-shadow:0 4px 16px rgba(196,169,98,0.25);text-decoration:none;}
-.ez-button-ghost{border-color:rgba(196,169,98,0.3);color:rgba(244,234,213,0.6);background:transparent;}
-.ez-button-ghost:hover{background:rgba(196,169,98,0.08);color:#f4ead5;border-color:rgba(196,169,98,0.5);}
-</style>
-<section class="episode-zero-hero">
+            index = """<section class="episode-zero-hero">
   <div class="hero-inner">
     <h1 class="ez-title">EPISODE ZERO</h1>
     <h2 class="ez-subtitle">Capture the Flag</h2>
