@@ -1,0 +1,100 @@
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/orm/loading.py", line 151, in <listcomp>
+ctfd-1  |     rows = [proc(row) for row in fetch]
+ctfd-1  |             ^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/orm/loading.py", line 1269, in polymorphic_instance
+ctfd-1  |     _instance = polymorphic_instances[discriminator]
+ctfd-1  |                 ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/util/_collections.py", line 746, in __missing__
+ctfd-1  |     self[key] = val = self.creator(key)
+ctfd-1  |                       ^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/orm/loading.py", line 1243, in configure_subclass_mapper
+ctfd-1  |     raise AssertionError(
+ctfd-1  | AssertionError: No such polymorphic_identity 'award' is defined
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:11 +0000] "GET /api/v1/scoreboard/top/10 HTTP/1.1" 500 37 "http://localhost:8000/scoreboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:24 +0000] "GET /challenges HTTP/1.1" 200 38363 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:24 +0000] "GET /files/6b377b6b92c49ea3a6561752dda0d041/exploitx_logo.png HTTP/1.1" 304 0 "http://localhost:8000/challenges" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:24 +0000] "HEAD /api/v1/notifications?since_id=1 HTTP/1.1" 200 0 "http://localhost:8000/challenges" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:24 +0000] "GET /api/v1/challenges HTTP/1.1" 200 1019 "http://localhost:8000/challenges" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:36 +0000] "GET /api/v1/challenges/5 HTTP/1.1" 200 12152 "http://localhost:8000/challenges" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:36 +0000] "GET /plugins/challenges/assets/view.js HTTP/1.1" 304 0 "http://localhost:8000/challenges" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:41 +0000] "GET /events HTTP/1.1" 200 242 "http://localhost:8000/scoreboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:47 +0000] "GET /scoreboard HTTP/1.1" 200 42185 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:47 +0000] "GET /files/6b377b6b92c49ea3a6561752dda0d041/exploitx_logo.png HTTP/1.1" 304 0 "http://localhost:8000/scoreboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:47 +0000] "HEAD /api/v1/notifications?since_id=1 HTTP/1.1" 200 0 "http://localhost:8000/scoreboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:47 +0000] "GET /api/v1/brackets?type=teams HTTP/1.1" 200 30 "http://localhost:8000/scoreboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | ERROR [CTFd] Exception on /api/v1/scoreboard/top/10 [GET]
+ctfd-1  | Traceback (most recent call last):
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/orm/loading.py", line 1241, in configure_subclass_mapper
+ctfd-1  |     sub_mapper = mapper.polymorphic_map[discriminator]
+ctfd-1  |                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+ctfd-1  | KeyError: 'award'
+ctfd-1  | 
+ctfd-1  | During handling of the above exception, another exception occurred:
+ctfd-1  | 
+ctfd-1  | Traceback (most recent call last):
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/flask/app.py", line 1517, in full_dispatch_request
+ctfd-1  |     rv = self.dispatch_request()
+ctfd-1  |          ^^^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/flask/app.py", line 1503, in dispatch_request
+ctfd-1  |     return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/flask_restx/api.py", line 402, in wrapper
+ctfd-1  |     resp = resource(*args, **kwargs)
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/flask/views.py", line 84, in view
+ctfd-1  |     return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/flask_restx/resource.py", line 41, in dispatch_request
+ctfd-1  |     resp = meth(*args, **kwargs)
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/CTFd/CTFd/utils/decorators/visibility.py", line 94, in _check_account_visibility
+ctfd-1  |     return f(*args, **kwargs)
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/CTFd/CTFd/utils/decorators/visibility.py", line 21, in _check_score_visibility
+ctfd-1  |     return f(*args, **kwargs)
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/CTFd/CTFd/api/v1/scoreboard.py", line 98, in get
+ctfd-1  |     response = get_scoreboard_detail(count=count, bracket_id=bracket_id)
+ctfd-1  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/flask_caching/__init__.py", line 899, in decorated_function
+ctfd-1  |     rv = self._call_fn(f, *args, **kwargs)
+ctfd-1  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/flask_caching/__init__.py", line 185, in _call_fn
+ctfd-1  |     return ensure_sync(fn)(*args, **kwargs)
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/CTFd/CTFd/utils/scoreboard/__init__.py", line 29, in get_scoreboard_detail
+ctfd-1  |     awards = awards.all()
+ctfd-1  |              ^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/orm/query.py", line 2773, in all
+ctfd-1  |     return self._iter().all()
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/engine/result.py", line 1476, in all
+ctfd-1  |     return self._allrows()
+ctfd-1  |            ^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/engine/result.py", line 401, in _allrows
+ctfd-1  |     rows = self._fetchall_impl()
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/engine/result.py", line 1389, in _fetchall_impl
+ctfd-1  |     return self._real_result._fetchall_impl()
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/engine/result.py", line 1813, in _fetchall_impl
+ctfd-1  |     return list(self.iterator)
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/orm/loading.py", line 151, in chunks
+ctfd-1  |     rows = [proc(row) for row in fetch]
+ctfd-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/orm/loading.py", line 151, in <listcomp>
+ctfd-1  |     rows = [proc(row) for row in fetch]
+ctfd-1  |             ^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/orm/loading.py", line 1269, in polymorphic_instance
+ctfd-1  |     _instance = polymorphic_instances[discriminator]
+ctfd-1  |                 ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/util/_collections.py", line 746, in __missing__
+ctfd-1  |     self[key] = val = self.creator(key)
+ctfd-1  |                       ^^^^^^^^^^^^^^^^^
+ctfd-1  |   File "/opt/venv/lib/python3.11/site-packages/sqlalchemy/orm/loading.py", line 1243, in configure_subclass_mapper
+ctfd-1  |     raise AssertionError(
+ctfd-1  | AssertionError: No such polymorphic_identity 'award' is defined
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:47 +0000] "GET /api/v1/scoreboard/top/10 HTTP/1.1" 500 37 "http://localhost:8000/scoreboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:42:47 +0000] "GET /api/v1/scoreboard HTTP/1.1" 200 1513 "http://localhost:8000/scoreboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+ctfd-1  | 172.20.0.1 - - [25/Feb/2026:13:43:04 +0000] "GET /events HTTP/1.1" 200 198 "http://localhost:8000/challenges" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"

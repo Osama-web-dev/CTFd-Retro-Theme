@@ -104,18 +104,18 @@
   }
 
   .crown-gold {
-    color: #ffd700;
-    text-shadow: 0 0 10px #ffd700, 0 0 20px #c4a962;
+    color: #c4a962;
+    text-shadow: 0 0 8px rgba(196, 169, 98, 0.8);
   }
 
   .crown-silver {
-    color: #d8d8d8;
-    text-shadow: 0 0 8px #d8d8d8, 0 0 15px #a0a0a0;
+    color: #c0c0c0;
+    text-shadow: 0 0 6px rgba(192, 192, 192, 0.6);
   }
 
   .crown-bronze {
     color: #cd7f32;
-    text-shadow: 0 0 8px #cd7f32, 0 0 15px #8b4513;
+    text-shadow: 0 0 6px rgba(205, 127, 50, 0.6);
   }
 
   @keyframes crown-float {
@@ -196,17 +196,21 @@
               <template
                 x-for="(standing, index) in standings.filter(i => activeBracket ? i.bracket_id==activeBracket : true)">
                 <tr>
-                  <th scope="row" class="text-center" x-text="index + 1"></th>
-                  <td class="text-start">
+                  <th scope="row" class="text-center">
                     <template x-if="index === 0">
-                      <i class="fas fa-crown crown-icon crown-gold" title="1st Place"></i>
+                      <i class="fas fa-crown crown-icon crown-gold"></i>
                     </template>
                     <template x-if="index === 1">
-                      <i class="fas fa-crown crown-icon crown-silver" title="2nd Place"></i>
+                      <i class="fas fa-crown crown-icon crown-silver"></i>
                     </template>
                     <template x-if="index === 2">
-                      <i class="fas fa-crown crown-icon crown-bronze" title="3rd Place"></i>
+                      <i class="fas fa-crown crown-icon crown-bronze"></i>
                     </template>
+                    <template x-if="index > 2">
+                      <span x-text="index + 1"></span>
+                    </template>
+                  </th>
+                  <td class="text-start">
                     <a :href="standing.account_url" x-text="standing.name" class="fs-5 pb-1"></a>
                     <template x-if="standing.bracket_name">
                       <span class="badge bg-secondary ms-2" x-text="standing.bracket_name"></span>
@@ -230,6 +234,5 @@
 {% endblock %}
 
 {% block scripts %}
-{{ super() }}
 {{ Assets.js("assets/js/scoreboard.js") }}
 {% endblock %}

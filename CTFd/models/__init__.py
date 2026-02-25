@@ -251,7 +251,15 @@ class Awards(db.Model):
     user = db.relationship("Users", foreign_keys="Awards.user_id", lazy="select")
     team = db.relationship("Teams", foreign_keys="Awards.team_id", lazy="select")
 
-    __mapper_args__ = {"polymorphic_identity": "standard", "polymorphic_on": type}
+    class alt_defaultdict(defaultdict):
+        def __missing__(self, key):
+            return self["standard"]
+
+    __mapper_args__ = {
+        "polymorphic_identity": "standard",
+        "polymorphic_on": type,
+        "_polymorphic_map": alt_defaultdict(),
+    }
 
     @hybrid_property
     def account_id(self):
