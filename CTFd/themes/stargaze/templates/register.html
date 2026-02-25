@@ -2,7 +2,6 @@
 
 {% block content %}
 <style>
-  /* ─── REGISTER PAGE — PAPER CARD STACK (dark mode compatible) ─── */
   .register-page-wrap {
     display: flex;
     align-items: center;
@@ -16,7 +15,7 @@
     position: relative;
     width: 100%;
     max-width: 500px;
-    z-index: 1;
+    z-index: 5;
   }
 
   .register-card-stack::before,
@@ -27,7 +26,7 @@
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 4px;
-    box-shadow: 2px 2px 0 var(--shadow);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   }
 
   .register-card-stack::before {
@@ -45,54 +44,40 @@
     border-radius: 4px;
     padding: 2.4rem;
     z-index: 1;
-    box-shadow: 4px 6px 0 var(--shadow), 0 12px 28px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   }
 
   .register-tape-label {
-    background: var(--accent);
-    color: #f4ead5;
+    background: linear-gradient(180deg, #c56a2d, #a85420);
+    color: var(--text);
     font-family: 'Special Elite', Georgia, serif;
     font-size: 0.72rem;
     letter-spacing: 0.18em;
-    text-transform: uppercase;
     text-align: center;
     padding: 0.35rem 1rem;
     margin: -2.4rem -2.4rem 1.8rem;
     border-bottom: 1px solid var(--border);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 
   .register-title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif !important;
     font-weight: 900;
-    color: var(--text);
+    color: var(--text) !important;
     text-align: center;
     font-size: 2rem;
     margin-bottom: 0.25rem;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
   }
 
   .register-subtitle {
     text-align: center;
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     letter-spacing: 0.1em;
-    margin-bottom: 2rem;
-  }
-
-  .register-card .btn-primary::before {
-    content: '✎ ';
-  }
-
-  .register-card small.form-text {
-    font-family: 'Courier Prime', monospace;
-    font-size: 0.75rem;
-    font-style: italic;
-    color: var(--text-muted);
+    margin-bottom: 1.8rem;
   }
 </style>
-
-<div class="jumbotron" style="display:none;"></div>
 
 <div class="register-page-wrap">
   <div class="register-card-stack">
@@ -102,31 +87,27 @@
       <p class="register-subtitle">FILL IN YOUR CREDENTIALS · PRESS RECORD</p>
 
       {% include "components/errors.html" %}
-
       {% if integrations.mlc() %}
-      <a class="btn btn-secondary btn-lg btn-block w-100 mb-3" href="{{ url_for('auth.oauth_login') }}">
-        Login with Major League Cyber
-      </a>
+      <a class="btn btn-secondary btn-lg w-100 mb-3" href="{{ url_for('auth.oauth_login') }}">Login with Major League
+        Cyber</a>
       <hr>
       {% endif %}
-
       {% with form = Forms.auth.RegistrationForm() %}
       {% from "macros/forms.html" import render_extra_fields %}
       <form method="post" accept-charset="utf-8" role="form">
         <div class="mb-3">
           <b>{{ form.name.label(class="form-label") }}</b>
           {{ form.name(class="form-control", value=name, autocomplete="username") }}
-          <small class="form-text text-muted">{% trans %}Your username on the site{% endtrans %}</small>
+          <small class="text-muted">{% trans %}Your username on the site{% endtrans %}</small>
         </div>
         <div class="mb-3">
           <b>{{ form.email.label(class="form-label") }}</b>
           {{ form.email(class="form-control", value=email, autocomplete="email") }}
-          <small class="form-text text-muted">{% trans %}Never shown to the public{% endtrans %}</small>
+          <small class="text-muted">{% trans %}Never shown to the public{% endtrans %}</small>
         </div>
         <div class="mb-3">
           <b>{{ form.password.label(class="form-label") }}</b>
           {{ form.password(class="form-control", value=password, autocomplete="new-password") }}
-          <small class="form-text text-muted">{% trans %}Password used to log into your account{% endtrans %}</small>
         </div>
         {{ form.nonce() }}
         {{ render_extra_fields(form.extra) }}
@@ -138,7 +119,7 @@
         {% if Configs.tos_or_privacy %}
         <div class="row pt-3">
           <div class="col-md-12 text-center">
-            <small class="text-muted text-center">
+            <small class="text-muted">
               {% trans trimmed privacy_link=Configs.privacy_link, tos_link=Configs.tos_link %}
               By registering, you agree to the
               <a href="{{ privacy_link }}" target="_blank">privacy policy</a>

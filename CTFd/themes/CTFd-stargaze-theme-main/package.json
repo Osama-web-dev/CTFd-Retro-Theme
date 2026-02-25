@@ -2,7 +2,7 @@
   "name": "stargaze",
   "private": true,
   "version": "0.0.1",
-  "author": "Praneesh R V",
+  "author": "Mohammed Osama Yusouf S M",
   "scripts": {
     "dev": "vite build --watch --mode=development",
     "build": "vite build",

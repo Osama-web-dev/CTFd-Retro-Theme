@@ -2,169 +2,138 @@
 
 {% block content %}
 <style>
-  /* ─── SCOREBOARD — ARCADE NOTICE BOARD (uses CSS vars for dark mode) ─── */
-
-  /* Wooden board frame */
-  #scoreboard-wrap {
+  /* ─── SCOREBOARD page styles ─── */
+  .retro-board-wrap {
     background:
-      repeating-linear-gradient(88deg,
-        transparent 0px, transparent 18px,
-        rgba(0, 0, 0, 0.03) 18px, rgba(0, 0, 0, 0.03) 19px),
-      linear-gradient(160deg, #5c3d26 0%, #3b2a1e 35%, #4a3220 70%, #2e2016 100%);
-    border: 8px solid #2e2016;
+      repeating-linear-gradient(88deg, transparent 0px, transparent 18px, rgba(255, 255, 255, 0.012) 18px, rgba(255, 255, 255, 0.012) 19px),
+      linear-gradient(160deg, #1a1410 0%, #12100e 35%, #16120c 70%, #0e0c0a 100%);
+    border: 6px solid #0e0c0a;
     border-radius: 4px;
-    padding: 2rem;
-    box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.4), 0 8px 32px rgba(0, 0, 0, 0.25);
-    position: relative;
-  }
-
-  [data-theme="dark"] #scoreboard-wrap {
-    background:
-      repeating-linear-gradient(88deg, transparent 0px, transparent 18px, rgba(255, 255, 255, 0.015) 18px, rgba(255, 255, 255, 0.015) 19px),
-      linear-gradient(160deg, #1a1208 0%, #12100e 35%, #1a1208 70%, #0e0c0a 100%);
-    border-color: #0a0806;
-  }
-
-  #scoreboard-wrap::before {
-    content: '◉ ◉';
-    position: absolute;
-    top: 10px;
-    left: 14px;
-    color: rgba(196, 169, 98, 0.4);
-    font-size: 14px;
-    letter-spacing: 22px;
-    pointer-events: none;
-  }
-
-  #scoreboard-wrap::after {
-    content: '◉ ◉';
-    position: absolute;
-    bottom: 10px;
-    right: 14px;
-    color: rgba(196, 169, 98, 0.4);
-    font-size: 14px;
-    letter-spacing: 22px;
-    pointer-events: none;
-  }
-
-  /* Gold plaque */
-  .board-title-plaque {
-    background: linear-gradient(180deg, #c4a962 0%, #a8883c 50%, #c4a962 100%);
-    color: #1e1a16;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1.1rem;
-    font-weight: 900;
-    letter-spacing: 0.2em;
-    text-align: center;
-    padding: 0.6rem 2rem;
-    margin: -2rem -2rem 1.5rem;
-    border-bottom: 3px solid #8a6a20;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-  }
-
-  /* Score-graph: position:relative + z-index ensure it's above paper texture */
-  #score-graph {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 3px 3px 0 var(--shadow);
+    padding: 0;
+    box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.6), 0 8px 32px rgba(0, 0, 0, 0.5);
     position: relative;
     z-index: 5;
   }
 
-  #score-graph::before {
-    content: '';
+  .retro-board-wrap::before {
+    content: '◉ ◉';
     position: absolute;
-    top: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 10px;
-    background: rgba(196, 169, 98, 0.45);
-    border-radius: 1px;
+    top: 10px;
+    left: 14px;
+    color: rgba(196, 169, 98, 0.3);
+    font-size: 13px;
+    letter-spacing: 22px;
     pointer-events: none;
+    z-index: 1;
   }
 
-  /* Chart canvas must be clickable / visible */
-  #score-graph canvas,
-  #score-graph svg,
-  .ct-chart {
+  .retro-board-wrap::after {
+    content: '◉ ◉';
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+    color: rgba(196, 169, 98, 0.3);
+    font-size: 13px;
+    letter-spacing: 22px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .board-inner {
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  .board-title-plaque {
+    background: linear-gradient(180deg, #c4a962 0%, #a8883c 50%, #c4a962 100%);
+    color: #12100e;
+    font-family: 'Special Elite', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-align: center;
+    padding: 0.6rem 2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid #7a5e18;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Score graph wrapper — position:relative z-index:10 to stay above all layers */
+  .score-graph-wrap {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
     position: relative;
-    z-index: 6;
+    z-index: 10;
   }
 
-  /* Paper table pinned on board */
-  #scoreboard-wrap .table {
+  /* The actual graph div — NO z-index tricks needed; parent handles it */
+  #scoreboard-graph {
+    position: relative;
+    z-index: 10;
+    min-height: 200px;
+  }
+
+  /* Scoreboard table */
+  .retro-board-wrap .table {
     background: var(--panel) !important;
     border: 1px solid var(--border);
-    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     border-radius: 3px;
   }
 
-  #scoreboard-wrap .table thead th {
-    background: #2a1e12;
-    color: var(--accent2) !important;
+  .retro-board-wrap .table thead th {
+    background: #0e0c0a;
+    color: var(--accent) !important;
   }
 
-  #scoreboard-wrap .table tbody tr td,
-  #scoreboard-wrap .table tbody tr th {
+  .retro-board-wrap .table tbody tr td,
+  .retro-board-wrap .table tbody tr th {
     color: var(--text) !important;
   }
 
-  #scoreboard-wrap .table tbody tr:nth-of-type(odd) {
+  .retro-board-wrap .table tbody tr:hover {
     background-color: rgba(196, 169, 98, 0.06) !important;
   }
 
-  #scoreboard-wrap .table tbody tr:nth-of-type(even) {
-    background-color: transparent !important;
+  /* 1st place */
+  .retro-board-wrap .table tbody tr:first-child th {
+    color: var(--accent) !important;
+    font-size: 1.1em;
   }
 
-  #scoreboard-wrap .table tbody tr:hover {
-    background-color: rgba(196, 169, 98, 0.15) !important;
-  }
-
-  /* 1st place crown + shimmer */
-  #scoreboard-wrap .table tbody tr:first-child th {
-    color: var(--accent2) !important;
-    font-size: 1.15em;
-  }
-
-  #scoreboard-wrap .table tbody tr:first-child th::before {
+  .retro-board-wrap .table tbody tr:first-child th::before {
     content: '♛ ';
-    font-size: 0.9em;
   }
 
-  #scoreboard-wrap .table tbody tr:first-child {
+  .retro-board-wrap .table tbody tr:first-child {
     animation: gold-shimmer 3s ease-in-out infinite;
   }
 
   /* Nav pills on dark board */
-  #scoreboard-wrap .nav-pills .nav-link {
-    color: #f4ead5;
-    background: rgba(244, 234, 213, 0.08);
-    border: 1px solid rgba(196, 169, 98, 0.2);
-    margin: 4px;
-    font-family: 'Special Elite', Georgia, serif;
+  .retro-board-wrap .nav-pills .nav-link {
+    color: rgba(244, 234, 213, 0.7);
+    background: rgba(244, 234, 213, 0.04);
+    border: 1px solid rgba(196, 169, 98, 0.15);
+    margin: 3px;
     font-size: 0.85rem;
   }
 
-  #scoreboard-wrap .nav-pills .nav-link:hover {
-    background: rgba(196, 169, 98, 0.18);
-    color: var(--accent2);
+  .retro-board-wrap .nav-pills .nav-link:hover {
+    background: rgba(196, 169, 98, 0.12);
+    color: var(--accent);
   }
 
-  #scoreboard-wrap .nav-pills .nav-link.active {
-    background: var(--accent2) !important;
-    color: #1e1a16 !important;
-    border-color: var(--accent2);
+  .retro-board-wrap .nav-pills .nav-link.active {
+    background: var(--accent) !important;
+    color: var(--bg) !important;
   }
 
-  #scoreboard-wrap h3.text-muted {
-    color: rgba(244, 234, 213, 0.5) !important;
-    font-family: 'Courier Prime', monospace;
+  .retro-board-wrap h3.text-muted {
+    color: rgba(244, 234, 213, 0.4) !important;
   }
 </style>
 
@@ -177,67 +146,80 @@
 <div class="container my-4">
   {% include "components/errors.html" %}
 
-  <div id="scoreboard-wrap">
+  <div class="retro-board-wrap">
     <div class="board-title-plaque">★ HALL OF HACKERS ★</div>
+    <div class="board-inner">
 
-    <!-- Score graph — IDs and x-data must remain for CTFd JS -->
-    <div id="score-graph" class="align-items-center" :class="{'d-flex': show, 'd-none': !show}"
-      x-data="ScoreboardDetail" x-ref="scoregraph" @bracket-change.window="activeBracket=$event.detail; update();">
-      <div class="col-md-12 text-center">
-        <i class="fas fa-circle-notch fa-spin fa-3x fa-fw spinner"></i>
-      </div>
-    </div>
-
-    <!-- Scoreboard list — IDs and x-data must remain for CTFd JS -->
-    <div id="scoreboard" class="row" x-data="ScoreboardList">
-      <template x-if="brackets.length && standings.length">
-        <div class="col-md-12 py-3">
-          <nav class="nav nav-pills nav-fill">
-            <button :class="{'nav-link': true, 'active': !activeBracket}" @click="activeBracket=null">{% trans %}All{%
-              endtrans %}</button>
-            <template x-for="bracket in brackets">
-              <button :class="{'nav-link': true, 'active': activeBracket == bracket.id}" x-text="bracket.name"
-                @click="activeBracket=bracket.id"></button>
-            </template>
-          </nav>
+      <!-- Score Graph — exact CTFd Alpine structure preserved -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="score-graph-wrap">
+            <div id="score-graph" class="align-items-center" :class="{'d-flex': show, 'd-none': !show}"
+              x-data="ScoreboardDetail" x-ref="scoregraph"
+              @bracket-change.window="activeBracket=$event.detail; update();">
+              <div class="col-md-12 text-center">
+                <i class="fas fa-circle-notch fa-spin fa-3x fa-fw" style="color:var(--accent);"></i>
+              </div>
+            </div>
+          </div>
         </div>
-      </template>
-
-      <div class="col-md-12" x-show="standings.length">
-        <table class="table table-striped align-middle">
-          <thead>
-            <tr>
-              <th style="width:10px">{% trans %}Place{% endtrans %}</th>
-              <th class="text-start ps-3">{{ get_mode_as_word(capitalize=True) }}</th>
-              <th>{% trans %}Score{% endtrans %}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template
-              x-for="(standing, index) in standings.filter(i => activeBracket ? i.bracket_id==activeBracket : true)">
-              <tr>
-                <th scope="row" class="text-center" x-text="index + 1"></th>
-                <td class="text-start">
-                  <a :href="standing.account_url" x-text="standing.name"></a>
-                  <template x-if="standing.bracket_name">
-                    <span class="badge bg-secondary ms-2" x-text="standing.bracket_name"></span>
-                  </template>
-                </td>
-                <td x-text="standing.score"></td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
       </div>
 
-      <div class="col-md-12" x-show="! standings.length">
-        <h3 class="text-center text-muted">{% trans %}Scoreboard is empty{% endtrans %}</h3>
+      <!-- Scoreboard List — exact CTFd Alpine structure preserved -->
+      <div class="row">
+        <div class="col-md-12" id="scoreboard" x-data="ScoreboardList">
+          <template x-if="brackets.length && standings.length">
+            <div class="py-3">
+              <nav class="nav nav-pills nav-fill">
+                <button :class="{'nav-link': true, 'active': !activeBracket}" @click="activeBracket=null">{% trans
+                  %}All{% endtrans %}</button>
+                <template x-for="bracket in brackets">
+                  <button :class="{'nav-link': true, 'active': activeBracket == bracket.id}" x-text="bracket.name"
+                    @click="activeBracket=bracket.id"></button>
+                </template>
+              </nav>
+            </div>
+          </template>
+
+          <div x-show="standings.length">
+            <table class="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th style="width:10px">{% trans %}Place{% endtrans %}</th>
+                  <th class="text-start ps-3">{{ get_mode_as_word(capitalize=True) }}</th>
+                  <th>{% trans %}Score{% endtrans %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template
+                  x-for="(standing, index) in standings.filter(i => activeBracket ? i.bracket_id==activeBracket : true)">
+                  <tr>
+                    <th scope="row" class="text-center" x-text="index + 1"></th>
+                    <td class="text-start">
+                      <a :href="standing.account_url" x-text="standing.name"></a>
+                      <template x-if="standing.bracket_name">
+                        <span class="badge bg-secondary ms-2" x-text="standing.bracket_name"></span>
+                      </template>
+                    </td>
+                    <td x-text="standing.score"></td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+
+          <div x-show="!standings.length">
+            <h3 class="text-center text-muted py-4">{% trans %}Scoreboard is empty{% endtrans %}</h3>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+{{ super() }}
 {{ Assets.js("assets/js/scoreboard.js") }}
 {% endblock %}
