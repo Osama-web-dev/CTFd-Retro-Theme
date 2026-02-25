@@ -369,7 +369,7 @@
         initAnalogFlicker();
         initFilmBurn();
         initFloatingCharacters();
-        initPageTransitions();
+        // initPageTransitions(); // Disabled per user request to speed up navigation
         // Cursor is handled by retro-cursor.js
     }
 

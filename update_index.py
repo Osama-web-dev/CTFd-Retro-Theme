@@ -25,6 +25,7 @@ with app.app_context():
         hero_html = (
             '<section class="episode-zero-hero">'
             '<div class="hero-inner">'
+            '<img src="{{ url_for('themes.static', filename='img/logo.png') }}" alt="Logo" class="logo">'
             '<h1 class="ez-title">EPISODE ZERO</h1>'
             '<h2 class="ez-subtitle">Capture the Flag</h2>'
             '<p class="ez-tagline">&ldquo;Rewrite the story from the beginning.&rdquo;</p>'

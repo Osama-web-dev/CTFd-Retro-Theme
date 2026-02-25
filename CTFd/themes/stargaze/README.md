@@ -35,10 +35,3 @@ The homepage (`templates/index.html`) uses Tailwind CSS via CDN. You can edit th
 ### Colors
 Core theme colors are defined in `assets/scss/main.scss` and `templates/base.html` (CSS Variables).
 
-```css
-:root {
-  --lemon: #ccff00;
-  --lemon-dim: #a3e635;
-  --lemon-glow: rgba(204, 255, 0, 0.5);
-}
-```

@@ -9,6 +9,7 @@ with app.app_context():
         hero_html = (
             '<section class="episode-zero-hero">'
             '<div class="hero-inner">'
+            '<img src="/themes/stargaze/static/img/exploitx_logo.png" alt="Logo" class="logo" style="max-width: 150px; height: auto; margin: 0 auto 20px auto; display: block;">'
             '<h1 class="ez-title">EPISODE ZERO</h1>'
             '<h2 class="ez-subtitle">Capture the Flag</h2>'
             '<p class="ez-tagline">&ldquo;Rewrite the story from the beginning.&rdquo;</p>'

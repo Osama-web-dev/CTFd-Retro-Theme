@@ -2,12 +2,12 @@
 <html>
 
 <head>
-  <title>{{ title or Configs.ctf_name }}</title>
+  <title>Episode Zero</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="{{ url_for('views.themes', theme='stargaze', path='img/favicon.ico') }}">
+  <link rel="shortcut icon" href="/themes/stargaze/static/img/favicon.ico?d=34473a0b" type="image/x-icon">
 
-  {{ meta | safe }}
+  
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
@@ -18,8 +18,8 @@
     href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&display=swap"
     rel="stylesheet">
 
-  {% block stylesheets %}
-  {{ Assets.css("assets/scss/main.scss") }}
+  
+  <link rel="stylesheet" href="/themes/stargaze/static/assets/main.e9ec7884.css">
   <style>
     /* ═══════════════════════════════════════════════
          EPISODE ZERO — STARGAZE RETRO DARK THEME
@@ -942,16 +942,16 @@
       display: none !important;
     }
   </style>
-  {% endblock %}
+  
 
-  {{ Plugins.styles }}
+  
 
   <script type="text/javascript">
     window.init = {
-      'urlRoot': "{{ request.script_root }}",
-      'csrfNonce': "{{ Session.nonce }}",
-      'userMode': "{{ Configs.user_mode }}",
-      'userId': {{ Session.id }},
+      'urlRoot': "",
+      'csrfNonce': "3c11e7703c4fa7d1a7b267c8c9d96ab8a03263acc7e9a4250965c039fca79a21",
+      'userMode': "teams",
+      'userId': 0,
     'userName': { { User.name | tojson } },
     'userEmail': { { User.email | tojson } },
     'userVerified': { { User.verified | tojson } },
@@ -961,15 +961,20 @@
     'end': { { Configs.end | tojson } },
     'themeSettings': { { Configs.theme_settings | tojson } },
     'eventSounds': [
-      "{{ url_for('views.themes', theme='core', path='sounds/notification.webm') }}",
-      "{{ url_for('views.themes', theme='core', path='sounds/notification.mp3') }}",
+      "/themes/core/static/sounds/notification.webm?d=34473a0b",
+      "/themes/core/static/sounds/notification.mp3?d=34473a0b",
     ],
     }
   </script>
 
-  {% block theme_header %}
-  {{ Configs.theme_header }}
-  {% endblock %}
+  
+  <style id="theme-color">
+:root {--theme-color: #000000;}
+.navbar{background-color: var(--theme-color) !important;}
+.jumbotron{background-color: var(--theme-color) !important;}
+</style>
+
+  
 </head>
 
 <body>
@@ -1010,39 +1015,541 @@
     }
   </style>
 
-  {% block navbar %}
-  {% include "components/navbar.html" %}
-  {% endblock %}
+  
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a href="/" class="navbar-brand">
+      
+      <img class="img-responsive ctf_logo" src="/files/6b377b6b92c49ea3a6561752dda0d041/exploitx_logo.png"
+        alt="Episode Zero" height="25">
+      
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#base-navbars"
+      aria-controls="base-navbars" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="base-navbars">
+      <ul class="navbar-nav me-auto">
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link" href="/users">
+            Users
+          </a>
+        </li>
+
+        
+        <li class="nav-item">
+          <a class="nav-link" href="/teams">
+            Teams
+          </a>
+        </li>
+        
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link" href="/scoreboard">
+            Scoreboard
+          </a>
+        </li>
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/challenges">
+            Challenges
+          </a>
+        </li>
+      </ul>
+
+      <hr class="d-sm-flex d-md-flex d-lg-none">
+
+      <ul class="navbar-nav ms-md-auto d-block d-sm-flex d-md-flex">
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link" href="/register">
+            <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Register">
+              <i class="fas fa-user-plus d-none d-md-inline d-lg-none"></i>
+            </span>
+            <span class="d-sm-inline d-md-none d-lg-inline">
+              <i class="fas fa-user-plus pe-1"></i>
+              Register
+            </span>
+          </a>
+        </li>
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/login">
+            <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login">
+              <i class="fas fa-sign-in-alt d-none d-md-inline d-lg-none"></i>
+            </span>
+            <span class="d-sm-inline d-md-none d-lg-inline">
+              <i class="fas fa-sign-in-alt pe-1"></i>
+              Login
+            </span>
+          </a>
+        </li>
+        
+
+        <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-language d-none d-md-inline"></i>
+            <span class="d-sm-inline d-md-none">
+              <i class="fas fa-language pe-1"></i>
+              Change language
+            </span>
+          </button>
+          <form x-data="LanguageForm">
+            <ul class="dropdown-menu dropdown-menu-end">
+              
+              <li>
+                <span class="dropdown-item bg-primary text-white" @click="set"
+                  value="en">
+                  English
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="de">
+                  Deutsch
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="pl">
+                  Polski
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="es">
+                  Español
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="ar">
+                  اَلْعَرَبِيَّةُ
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="zh_CN">
+                  简体中文
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="zh_TW">
+                  繁體中文
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="fr">
+                  Français
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="ko">
+                  한국어
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="ru">
+                  русский язык
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="pt_BR">
+                  Português do Brasil
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="sk">
+                  Slovenský jazyk
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="ja">
+                  日本語
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="it">
+                  Italiano
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="vi">
+                  tiếng Việt
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="ca">
+                  Català
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="el">
+                  Ελληνικά
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="fi">
+                  Suomi
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="ro">
+                  Română
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="sl">
+                  Slovenščina
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="sv">
+                  Svenska
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="he">
+                  עברית
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item " @click="set"
+                  value="uz">
+                  oʻzbekcha
+                </span>
+              </li>
+            </ul>
+          </form>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+  
 
   <main role="main">
-    {% block content %}
-    {% endblock %}
+    
+<style>
+  /* ─── RETRO SCOREBOARD STYLING ─── */
+  .retro-board-frame {
+    background:
+      repeating-linear-gradient(88deg, transparent 0px, transparent 22px, rgba(255, 255, 255, 0.008) 22px, rgba(255, 255, 255, 0.008) 23px),
+      linear-gradient(160deg, #1a1410 0%, #12100e 60%, #0e0c0a 100%);
+    border: 6px solid #0e0c0a;
+    border-radius: 4px;
+    box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.6), 0 8px 32px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 10;
+  }
+
+  .retro-board-frame::before {
+    content: '◉ ◉';
+    position: absolute;
+    top: 10px;
+    left: 14px;
+    color: rgba(196, 169, 98, 0.25);
+    font-size: 12px;
+    letter-spacing: 20px;
+    pointer-events: none;
+  }
+
+  .retro-board-frame::after {
+    content: '◉ ◉';
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+    color: rgba(196, 169, 98, 0.25);
+    font-size: 12px;
+    letter-spacing: 20px;
+    pointer-events: none;
+  }
+
+  .board-title-plaque {
+    background: linear-gradient(180deg, #c4a962 0%, #a8883c 50%, #c4a962 100%);
+    color: #12100e;
+    font-family: 'Special Elite', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+    text-align: center;
+    padding: 0.65rem 2rem;
+    border-bottom: 3px solid #7a5e18;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .board-body {
+    padding: 1.5rem;
+  }
+
+  /* Score graph in dark panel */
+  #score-graph {
+    position: relative;
+    z-index: 10;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    margin-bottom: 1.5rem;
+    box-shadow: inset 0 0 0 1px rgba(196, 169, 98, 0.06);
+  }
+
+  /* Scoreboard table panel */
+  #scoreboard .table {
+    background: var(--panel) !important;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  #scoreboard h3.text-muted {
+    color: var(--text-muted) !important;
+  }
+
+  /* First place gold shimmer */
+  @keyframes gold-shimmer {
+
+    0%,
+    100% {
+      text-shadow: 0 0 4px rgba(196, 169, 98, 0.3);
+    }
+
+    50% {
+      text-shadow: 0 0 12px rgba(196, 169, 98, 0.7);
+    }
+  }
+
+  #scoreboard .table tbody tr:first-child {
+    animation: gold-shimmer 3s ease-in-out infinite;
+  }
+
+  /* ─── CROWNS & MEDALS ─── */
+  .crown-icon {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 1.25rem;
+    animation: crown-float 3s ease-in-out infinite;
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+  }
+
+  .crown-gold {
+    color: #c4a962;
+    text-shadow: 0 0 8px rgba(196, 169, 98, 0.8);
+  }
+
+  .crown-silver {
+    color: #c0c0c0;
+    text-shadow: 0 0 6px rgba(192, 192, 192, 0.6);
+  }
+
+  .crown-bronze {
+    color: #cd7f32;
+    text-shadow: 0 0 6px rgba(205, 127, 50, 0.6);
+  }
+
+  @keyframes crown-float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-4px) scale(1.1);
+    }
+  }
+
+  /* ─── ENHANCED GRAPH STYLING ─── */
+  #score-graph {
+    background: linear-gradient(180deg, rgba(26, 20, 16, 0.9) 0%, rgba(14, 12, 10, 0.95) 100%) !important;
+    border: 2px solid rgba(196, 169, 98, 0.4) !important;
+    box-shadow: 0 0 25px rgba(196, 169, 98, 0.15), inset 0 0 20px rgba(0, 0, 0, 0.8) !important;
+    border-radius: 6px !important;
+    padding: 15px !important;
+    margin-bottom: 2rem !important;
+  }
+
+  #score-graph canvas {
+    /* Adds a retro neon blur to the chart lines */
+    filter: drop-shadow(0px 0px 6px rgba(196, 169, 98, 0.6)) contrast(1.1) saturate(1.2);
+  }
+</style>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>Scoreboard</h1>
+  </div>
+</div>
+
+<div class="container">
+  <div>
+  
+
+  
+</div>
+
+  <div class="retro-board-frame">
+    <div class="board-title-plaque">★ HALL OF HACKERS ★</div>
+    <div class="board-body">
+
+      <!-- EXACT original score-graph structure — no modifications to attrs -->
+      <div id="score-graph" class="align-items-center" :class="{'d-flex': show, 'd-none': !show}"
+        x-data="ScoreboardDetail" x-ref="scoregraph" @bracket-change.window="activeBracket=$event.detail; update();">
+        <div class="col-md-12 text-center">
+          <i class="fas fa-circle-notch fa-spin fa-3x fa-fw spinner"></i>
+        </div>
+      </div>
+
+      <!-- EXACT original scoreboard list structure -->
+      <div id="scoreboard" class="row" x-data="ScoreboardList">
+        <template x-if="brackets.length && standings.length">
+          <div class="col-md-12 py-3">
+            <nav class="nav nav-pills nav-fill">
+              <button :class="{'nav-link': true, 'active': !activeBracket}" @click="activeBracket=null">All</button>
+              <template x-for="bracket in brackets">
+                <button :class="{'nav-link': true, 'active': activeBracket == bracket.id}" x-text="bracket.name"
+                  @click="activeBracket=bracket.id"></button>
+              </template>
+            </nav>
+          </div>
+        </template>
+
+        <div class="col-md-12" x-show="standings.length">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th style="width: 10px">Place</th>
+                <th class="text-start ps-3">Team</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <template
+                x-for="(standing, index) in standings.filter(i => activeBracket ? i.bracket_id==activeBracket : true)">
+                <tr>
+                  <th scope="row" class="text-center">
+                    <template x-if="index === 0">
+                      <i class="fas fa-crown crown-icon crown-gold"></i>
+                    </template>
+                    <template x-if="index === 1">
+                      <i class="fas fa-crown crown-icon crown-silver"></i>
+                    </template>
+                    <template x-if="index === 2">
+                      <i class="fas fa-crown crown-icon crown-bronze"></i>
+                    </template>
+                    <template x-if="index > 2">
+                      <span x-text="index + 1"></span>
+                    </template>
+                  </th>
+                  <td class="text-start">
+                    <a :href="standing.account_url" x-text="standing.name" class="fs-5 pb-1"></a>
+                    <template x-if="standing.bracket_name">
+                      <span class="badge bg-secondary ms-2" x-text="standing.bracket_name"></span>
+                    </template>
+                  </td>
+                  <td x-text="standing.score"></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="col-md-12" x-show="! standings.length">
+          <h3 class="text-center text-muted">Scoreboard is empty</h3>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
   </main>
 
-  {% include "components/snackbar.html" %}
+  
 
-  {% if request.endpoint not in ['views.static_html', 'auth.login', 'auth.register'] %}
+  
   <footer class="footer">
     <div class="container text-center">
       <a href="https://ctfd.io" style="text-decoration:none;">
-        <small style="font-size:0.6rem; opacity:0.3;">{% trans %}Powered by CTFd{% endtrans %}</small>
+        <small style="font-size:0.6rem; opacity:0.3;">Powered by CTFd</small>
       </a>
     </div>
   </footer>
-  {% endif %}
+  
 
-  {% include "components/notifications.html" %}
+  <div x-data>
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div x-ref="toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+      <div class="toast-header">
+        <strong class="me-auto" x-text="$store.toast.title"></strong>
+        <small>just now</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body" x-html="$store.toast.html">
+      </div>
+    </div>
+  </div>
+</div>
 
-  {% block scripts %}
-  {{ Assets.js("assets/js/page.js") }}
-  {% endblock %}
 
-  {{ Plugins.scripts }}
+<div x-data>
+  <div class="modal fade" x-ref="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" x-text="$store.modal.title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p x-html="$store.modal.html"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+<script type="module"  src="/themes/stargaze/static/assets/index.9b9a8697.js"></script><script type="module"  src="/themes/stargaze/static/assets/index.1cf73b05.js"></script><script type="module"  src="/themes/stargaze/static/assets/echarts.128204f2.js"></script><script type="module"  src="/themes/stargaze/static/assets/scoreboard.024f37bd.js"></script>
+
+
+  
 
   <script src="/themes/stargaze/static/js/space_v5.js"></script>
-  <script src="/themes/stargaze/static/js/retro-cursor.js?v=2"></script>
+  <script src="/themes/stargaze/static/js/retro-cursor.js"></script>
 
-  {{ Configs.theme_footer }}
+  
 </body>
 
 </html>
