@@ -2,138 +2,95 @@
 
 {% block content %}
 <style>
-  /* ─── SCOREBOARD page styles ─── */
-  .retro-board-wrap {
+  /* ─── RETRO SCOREBOARD STYLING ─── */
+  .retro-board-frame {
     background:
-      repeating-linear-gradient(88deg, transparent 0px, transparent 18px, rgba(255, 255, 255, 0.012) 18px, rgba(255, 255, 255, 0.012) 19px),
-      linear-gradient(160deg, #1a1410 0%, #12100e 35%, #16120c 70%, #0e0c0a 100%);
+      repeating-linear-gradient(88deg, transparent 0px, transparent 22px, rgba(255, 255, 255, 0.008) 22px, rgba(255, 255, 255, 0.008) 23px),
+      linear-gradient(160deg, #1a1410 0%, #12100e 60%, #0e0c0a 100%);
     border: 6px solid #0e0c0a;
     border-radius: 4px;
-    padding: 0;
     box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.6), 0 8px 32px rgba(0, 0, 0, 0.5);
     position: relative;
-    z-index: 5;
+    z-index: 10;
   }
 
-  .retro-board-wrap::before {
+  .retro-board-frame::before {
     content: '◉ ◉';
     position: absolute;
     top: 10px;
     left: 14px;
-    color: rgba(196, 169, 98, 0.3);
-    font-size: 13px;
-    letter-spacing: 22px;
+    color: rgba(196, 169, 98, 0.25);
+    font-size: 12px;
+    letter-spacing: 20px;
     pointer-events: none;
-    z-index: 1;
   }
 
-  .retro-board-wrap::after {
+  .retro-board-frame::after {
     content: '◉ ◉';
     position: absolute;
     bottom: 10px;
     right: 14px;
-    color: rgba(196, 169, 98, 0.3);
-    font-size: 13px;
-    letter-spacing: 22px;
+    color: rgba(196, 169, 98, 0.25);
+    font-size: 12px;
+    letter-spacing: 20px;
     pointer-events: none;
-    z-index: 1;
-  }
-
-  .board-inner {
-    padding: 0 1.5rem 1.5rem;
   }
 
   .board-title-plaque {
     background: linear-gradient(180deg, #c4a962 0%, #a8883c 50%, #c4a962 100%);
     color: #12100e;
     font-family: 'Special Elite', Georgia, serif;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 900;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.22em;
     text-align: center;
-    padding: 0.6rem 2rem;
-    margin-bottom: 1.5rem;
+    padding: 0.65rem 2rem;
     border-bottom: 3px solid #7a5e18;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
   }
 
-  /* Score graph wrapper — position:relative z-index:10 to stay above all layers */
-  .score-graph-wrap {
+  .board-body {
+    padding: 1.5rem;
+  }
+
+  /* Score graph in dark panel */
+  #score-graph {
+    position: relative;
+    z-index: 10;
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 3px;
-    padding: 0.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-    position: relative;
-    z-index: 10;
+    box-shadow: inset 0 0 0 1px rgba(196, 169, 98, 0.06);
   }
 
-  /* The actual graph div — NO z-index tricks needed; parent handles it */
-  #scoreboard-graph {
-    position: relative;
-    z-index: 10;
-    min-height: 200px;
-  }
-
-  /* Scoreboard table */
-  .retro-board-wrap .table {
+  /* Scoreboard table panel */
+  #scoreboard .table {
     background: var(--panel) !important;
-    border: 1px solid var(--border);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     border-radius: 3px;
+    overflow: hidden;
   }
 
-  .retro-board-wrap .table thead th {
-    background: #0e0c0a;
-    color: var(--accent) !important;
+  #scoreboard h3.text-muted {
+    color: var(--text-muted) !important;
   }
 
-  .retro-board-wrap .table tbody tr td,
-  .retro-board-wrap .table tbody tr th {
-    color: var(--text) !important;
+  /* First place gold shimmer */
+  @keyframes gold-shimmer {
+
+    0%,
+    100% {
+      text-shadow: 0 0 4px rgba(196, 169, 98, 0.3);
+    }
+
+    50% {
+      text-shadow: 0 0 12px rgba(196, 169, 98, 0.7);
+    }
   }
 
-  .retro-board-wrap .table tbody tr:hover {
-    background-color: rgba(196, 169, 98, 0.06) !important;
-  }
-
-  /* 1st place */
-  .retro-board-wrap .table tbody tr:first-child th {
-    color: var(--accent) !important;
-    font-size: 1.1em;
-  }
-
-  .retro-board-wrap .table tbody tr:first-child th::before {
-    content: '♛ ';
-  }
-
-  .retro-board-wrap .table tbody tr:first-child {
+  #scoreboard .table tbody tr:first-child {
     animation: gold-shimmer 3s ease-in-out infinite;
-  }
-
-  /* Nav pills on dark board */
-  .retro-board-wrap .nav-pills .nav-link {
-    color: rgba(244, 234, 213, 0.7);
-    background: rgba(244, 234, 213, 0.04);
-    border: 1px solid rgba(196, 169, 98, 0.15);
-    margin: 3px;
-    font-size: 0.85rem;
-  }
-
-  .retro-board-wrap .nav-pills .nav-link:hover {
-    background: rgba(196, 169, 98, 0.12);
-    color: var(--accent);
-  }
-
-  .retro-board-wrap .nav-pills .nav-link.active {
-    background: var(--accent) !important;
-    color: var(--bg) !important;
-  }
-
-  .retro-board-wrap h3.text-muted {
-    color: rgba(244, 234, 213, 0.4) !important;
   }
 </style>
 
@@ -143,74 +100,66 @@
   </div>
 </div>
 
-<div class="container my-4">
+<div class="container">
   {% include "components/errors.html" %}
 
-  <div class="retro-board-wrap">
+  <div class="retro-board-frame">
     <div class="board-title-plaque">★ HALL OF HACKERS ★</div>
-    <div class="board-inner">
+    <div class="board-body">
 
-      <!-- Score Graph — exact CTFd Alpine structure preserved -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="score-graph-wrap">
-            <div id="score-graph" class="align-items-center" :class="{'d-flex': show, 'd-none': !show}"
-              x-data="ScoreboardDetail" x-ref="scoregraph"
-              @bracket-change.window="activeBracket=$event.detail; update();">
-              <div class="col-md-12 text-center">
-                <i class="fas fa-circle-notch fa-spin fa-3x fa-fw" style="color:var(--accent);"></i>
-              </div>
-            </div>
-          </div>
+      <!-- EXACT original score-graph structure — no modifications to attrs -->
+      <div id="score-graph" class="align-items-center" :class="{'d-flex': show, 'd-none': !show}"
+        x-data="ScoreboardDetail" x-ref="scoregraph" @bracket-change.window="activeBracket=$event.detail; update();">
+        <div class="col-md-12 text-center">
+          <i class="fas fa-circle-notch fa-spin fa-3x fa-fw spinner"></i>
         </div>
       </div>
 
-      <!-- Scoreboard List — exact CTFd Alpine structure preserved -->
-      <div class="row">
-        <div class="col-md-12" id="scoreboard" x-data="ScoreboardList">
-          <template x-if="brackets.length && standings.length">
-            <div class="py-3">
-              <nav class="nav nav-pills nav-fill">
-                <button :class="{'nav-link': true, 'active': !activeBracket}" @click="activeBracket=null">{% trans
-                  %}All{% endtrans %}</button>
-                <template x-for="bracket in brackets">
-                  <button :class="{'nav-link': true, 'active': activeBracket == bracket.id}" x-text="bracket.name"
-                    @click="activeBracket=bracket.id"></button>
-                </template>
-              </nav>
-            </div>
-          </template>
+      <!-- EXACT original scoreboard list structure -->
+      <div id="scoreboard" class="row" x-data="ScoreboardList">
+        <template x-if="brackets.length && standings.length">
+          <div class="col-md-12 py-3">
+            <nav class="nav nav-pills nav-fill">
+              <button :class="{'nav-link': true, 'active': !activeBracket}" @click="activeBracket=null">{% trans %}All{%
+                endtrans %}</button>
+              <template x-for="bracket in brackets">
+                <button :class="{'nav-link': true, 'active': activeBracket == bracket.id}" x-text="bracket.name"
+                  @click="activeBracket=bracket.id"></button>
+              </template>
+            </nav>
+          </div>
+        </template>
 
-          <div x-show="standings.length">
-            <table class="table table-striped align-middle">
-              <thead>
+        <div class="col-md-12" x-show="standings.length">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th style="width: 10px">{% trans %}Place{% endtrans %}</th>
+                <th class="text-start ps-3">{{ get_mode_as_word(capitalize=True) }}</th>
+                <th>{% trans %}Score{% endtrans %}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <template
+                x-for="(standing, index) in standings.filter(i => activeBracket ? i.bracket_id==activeBracket : true)">
                 <tr>
-                  <th style="width:10px">{% trans %}Place{% endtrans %}</th>
-                  <th class="text-start ps-3">{{ get_mode_as_word(capitalize=True) }}</th>
-                  <th>{% trans %}Score{% endtrans %}</th>
+                  <th scope="row" class="text-center" x-text="index + 1"></th>
+                  <td class="text-start">
+                    <a :href="standing.account_url" x-text="standing.name"></a>
+                    <template x-if="standing.bracket_name">
+                      <span class="badge bg-secondary ms-2" x-text="standing.bracket_name"></span>
+                    </template>
+                  </td>
+                  <td x-text="standing.score"></td>
                 </tr>
-              </thead>
-              <tbody>
-                <template
-                  x-for="(standing, index) in standings.filter(i => activeBracket ? i.bracket_id==activeBracket : true)">
-                  <tr>
-                    <th scope="row" class="text-center" x-text="index + 1"></th>
-                    <td class="text-start">
-                      <a :href="standing.account_url" x-text="standing.name"></a>
-                      <template x-if="standing.bracket_name">
-                        <span class="badge bg-secondary ms-2" x-text="standing.bracket_name"></span>
-                      </template>
-                    </td>
-                    <td x-text="standing.score"></td>
-                  </tr>
-                </template>
-              </tbody>
-            </table>
-          </div>
+              </template>
+            </tbody>
+          </table>
+        </div>
 
-          <div x-show="!standings.length">
-            <h3 class="text-center text-muted py-4">{% trans %}Scoreboard is empty{% endtrans %}</h3>
-          </div>
+        <div class="col-md-12" x-show="! standings.length">
+          <h3 class="text-center text-muted">{% trans %}Scoreboard is empty{% endtrans %}</h3>
         </div>
       </div>
 
@@ -220,6 +169,5 @@
 {% endblock %}
 
 {% block scripts %}
-{{ super() }}
 {{ Assets.js("assets/js/scoreboard.js") }}
 {% endblock %}

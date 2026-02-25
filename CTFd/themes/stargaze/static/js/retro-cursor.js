@@ -1,186 +1,168 @@
 /**
- * RETRO CURSOR — STARGAZE THEME
- * Separate cursor + analog background engine
- * Uses requestAnimationFrame only, max 10 trail particles
+ * RETRO CURSOR — Episode Zero
+ * Design: outer gold ring (no fill) + inner gold solid dot, perfectly centred.
+ * Fix: hides until first mousemove to prevent the "snap from corner" on load.
  */
 (function () {
     'use strict';
 
-    const rand = (a, b) => Math.random() * (b - a) + a;
+    /* ── CONFIG ── */
+    var OUTER_SIZE = 36;   // px — outer ring diameter
+    var INNER_SIZE = 8;    // px — inner dot diameter
+    var GOLD = '#c4a962';
+    var GOLD_DIM = 'rgba(196,169,98,0.35)';
+    var TRAIL_MAX = 8;
+    var TRAIL_DECAY = 0.06; // opacity lost per frame
 
-    /* ── CURSOR SVG STRINGS ── */
-    const ARROW_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
-    <polygon points="3,2 3,18 8,13 11,20 13,19 10,12 17,12"
-      fill="#2f8f9d" stroke="#3b2a1e" stroke-width="1.5" stroke-linejoin="round"/>
-  </svg>`;
+    /* ── CREATE ELEMENTS ── */
+    var style = document.createElement('style');
+    style.textContent = [
+        'body { cursor: none !important; }',
+        'a, button, input, label, [role="button"], .challenge-button { cursor: none !important; }',
+        '#rc-outer {',
+        '  position: fixed; top: 0; left: 0;',
+        '  width: ' + OUTER_SIZE + 'px; height: ' + OUTER_SIZE + 'px;',
+        '  border-radius: 50%;',
+        '  border: 1.5px solid ' + GOLD + ';',
+        '  background: transparent;',
+        '  pointer-events: none;',
+        '  z-index: 2147483647;',
+        '  will-change: transform;',
+        '  opacity: 0;',               /* hidden until first move */
+        '  transition: width 0.15s, height 0.15s, border-color 0.15s;',
+        '}',
+        '#rc-inner {',
+        '  position: fixed; top: 0; left: 0;',
+        '  width: ' + INNER_SIZE + 'px; height: ' + INNER_SIZE + 'px;',
+        '  border-radius: 50%;',
+        '  background: ' + GOLD + ';',
+        '  pointer-events: none;',
+        '  z-index: 2147483647;',
+        '  will-change: transform;',
+        '  opacity: 0;',               /* hidden until first move */
+        '  box-shadow: 0 0 5px rgba(196,169,98,0.6);',
+        '}',
+    ].join('\n');
+    document.head.appendChild(style);
 
-    const HAND_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
-    <rect x="7" y="2" width="2.5" height="9" rx="1.2" fill="#2f8f9d" stroke="#3b2a1e" stroke-width="1"/>
-    <rect x="10" y="1" width="2.5" height="10" rx="1.2" fill="#2f8f9d" stroke="#3b2a1e" stroke-width="1"/>
-    <rect x="13" y="2" width="2.5" height="9" rx="1.2" fill="#2f8f9d" stroke="#3b2a1e" stroke-width="1"/>
-    <path d="M5,10 Q5,7 7,8 L7,14 Q5,15 5,12 Z" fill="#2f8f9d" stroke="#3b2a1e" stroke-width="1"/>
-    <rect x="5" y="13" width="12" height="7" rx="2" fill="#2f8f9d" stroke="#3b2a1e" stroke-width="1"/>
-  </svg>`;
+    var outer = document.createElement('div');
+    outer.id = 'rc-outer';
+    document.body.appendChild(outer);
 
-    let mx = 0, my = 0;
-    let prevX = 0, prevY = 0;
-    let isPointer = false;
-    let cursorEl, dotEl, rippleLayer;
-    const trail = [];
-    const MAX_TRAIL = 10;
-    let animFrame;
+    var inner = document.createElement('div');
+    inner.id = 'rc-inner';
+    document.body.appendChild(inner);
 
-    /* ── STYLE INJECTION ── */
-    function injectStyles() {
-        const s = document.createElement('style');
-        s.id = 'retro-cursor-styles';
-        s.textContent = `
-      *, *::before, *::after { cursor: none !important; }
-      #rc-cursor, #rc-dot, #rc-ripple { pointer-events: none !important; }
-      @keyframes rc-inkstamp {
-        0%   { transform: translate(-50%,-50%) scale(0); opacity: 0.8; }
-        100% { transform: translate(-50%,-50%) scale(2.8); opacity: 0; }
-      }
-      @keyframes rc-dustfade {
-        0%   { transform: scale(1) translateY(0); opacity: 0.65; }
-        100% { transform: scale(0) translateY(-10px); opacity: 0; }
-      }
-    `;
-        document.head.appendChild(s);
+    /* ── STATE ── */
+    var mx = -9999, my = -9999;   // off-screen until first move
+    var ox = -9999, oy = -9999;   // outer (lerps behind inner for a soft lag)
+    var visible = false;
+    var hovering = false;
+    var trails = [];
+
+    /* ── TRAIL FACTORY ── */
+    function spawnTrail(x, y) {
+        if (trails.length >= TRAIL_MAX) return;
+        var el = document.createElement('div');
+        el.style.cssText = [
+            'position:fixed',
+            'top:0', 'left:0',
+            'width:5px', 'height:5px',
+            'border-radius:50%',
+            'background:' + GOLD_DIM,
+            'pointer-events:none',
+            'z-index:2147483640',
+            'will-change:transform',
+            'opacity:0.5',
+        ].join(';');
+        document.body.appendChild(el);
+        el.style.transform = 'translate(' + (x - 2.5) + 'px,' + (y - 2.5) + 'px)';
+        trails.push({ el: el, opacity: 0.5 });
     }
 
-    /* ── DOM BUILD ── */
-    function buildDOM() {
-        cursorEl = document.createElement('div');
-        cursorEl.id = 'rc-cursor';
-        Object.assign(cursorEl.style, {
-            position: 'fixed', top: '0', left: '0',
-            width: '22px', height: '22px',
-            zIndex: '2147483647',
-            pointerEvents: 'none',
-            willChange: 'transform',
-            userSelect: 'none',
-        });
-        cursorEl.innerHTML = ARROW_SVG;
-
-        dotEl = document.createElement('div');
-        dotEl.id = 'rc-dot';
-        Object.assign(dotEl.style, {
-            position: 'fixed', top: '0', left: '0',
-            width: '4px', height: '4px', borderRadius: '50%',
-            background: '#c4a962',
-            zIndex: '2147483647',
-            pointerEvents: 'none',
-        });
-
-        rippleLayer = document.createElement('div');
-        rippleLayer.id = 'rc-ripple';
-        Object.assign(rippleLayer.style, {
-            position: 'fixed', top: '0', left: '0',
-            width: '100vw', height: '100vh',
-            zIndex: '2147483646',
-            pointerEvents: 'none',
-            overflow: 'hidden',
-        });
-
-        document.body.appendChild(cursorEl);
-        document.body.appendChild(dotEl);
-        document.body.appendChild(rippleLayer);
-    }
-
-    /* ── LOOP ── */
+    /* ── ANIMATION LOOP ── */
+    var trailTick = 0;
     function loop() {
-        cursorEl.style.transform = `translate(${mx}px,${my}px)`;
-        dotEl.style.transform = `translate(${mx - 2}px,${my - 2}px)`;
+        if (visible) {
+            /* Outer ring smoothly follows (lerp) */
+            ox += (mx - ox) * 0.18;
+            oy += (my - oy) * 0.18;
 
-        // Prune dead trail particles
-        for (let i = trail.length - 1; i >= 0; i--) {
-            if (!trail[i].isConnected) trail.splice(i, 1);
+            /* Outer ring: centred on cursor */
+            outer.style.transform = 'translate(' + (ox - OUTER_SIZE / 2) + 'px,' + (oy - OUTER_SIZE / 2) + 'px)';
+            /* Inner dot: centred exactly on cursor */
+            inner.style.transform = 'translate(' + (mx - INNER_SIZE / 2) + 'px,' + (my - INNER_SIZE / 2) + 'px)';
+
+            /* Spawn trail every 3 frames */
+            trailTick++;
+            if (trailTick % 3 === 0) spawnTrail(mx, my);
+
+            /* Decay trails */
+            for (var i = trails.length - 1; i >= 0; i--) {
+                trails[i].opacity -= TRAIL_DECAY;
+                if (trails[i].opacity <= 0) {
+                    if (trails[i].el.parentNode) trails[i].el.parentNode.removeChild(trails[i].el);
+                    trails.splice(i, 1);
+                } else {
+                    trails[i].el.style.opacity = trails[i].opacity;
+                }
+            }
         }
 
-        animFrame = requestAnimationFrame(loop);
+        requestAnimationFrame(loop);
     }
 
     /* ── EVENTS ── */
-    function onMouseMove(e) {
+    document.addEventListener('mousemove', function (e) {
         mx = e.clientX;
         my = e.clientY;
 
-        const dx = mx - prevX, dy = my - prevY;
-        if (dx * dx + dy * dy > 100 && trail.length < MAX_TRAIL && Math.random() < 0.5) {
-            spawnDust(mx, my);
-            prevX = mx; prevY = my;
+        if (!visible) {
+            visible = true;
+            /* Teleport outer to same spot on first move (no lerp lag) */
+            ox = mx; oy = my;
+            outer.style.opacity = '1';
+            inner.style.opacity = '1';
         }
-    }
+    }, { passive: true });
 
-    function spawnDust(x, y) {
-        const d = document.createElement('div');
-        const size = rand(2, 4);
-        Object.assign(d.style, {
-            position: 'fixed',
-            left: `${x + rand(-6, 6)}px`,
-            top: `${y + rand(-6, 6)}px`,
-            width: `${size}px`, height: `${size}px`,
-            borderRadius: '50%',
-            background: `rgba(196,169,98,${rand(0.4, 0.65)})`,
-            animation: `rc-dustfade ${rand(0.4, 0.9).toFixed(2)}s ease-out forwards`,
-            zIndex: '2147483645',
-            pointerEvents: 'none',
-        });
-        rippleLayer.appendChild(d);
-        trail.push(d);
-        setTimeout(() => { if (d.parentNode) d.remove(); }, 900);
-    }
-
-    function onMouseClick(e) {
-        const rip = document.createElement('div');
-        Object.assign(rip.style, {
-            position: 'fixed',
-            left: `${e.clientX}px`, top: `${e.clientY}px`,
-            width: '30px', height: '30px',
-            borderRadius: '50%',
-            border: '2px solid rgba(196,169,98,0.7)',
-            background: 'rgba(196,169,98,0.12)',
-            animation: 'rc-inkstamp 0.5s ease-out forwards',
-            zIndex: '2147483645',
-            pointerEvents: 'none',
-        });
-        rippleLayer.appendChild(rip);
-        setTimeout(() => { if (rip.parentNode) rip.remove(); }, 550);
-    }
-
-    function onMouseOver(e) {
-        const target = e.target;
-        const hoverEl = target.closest('a, button, [role="button"], input, select, textarea, label, .challenge-button, .nav-link, .btn, .dropdown-item, .page-link, .clickable');
-        const nowPointer = !!hoverEl;
-        if (nowPointer !== isPointer) {
-            isPointer = nowPointer;
-            cursorEl.innerHTML = isPointer ? HAND_SVG : ARROW_SVG;
+    document.addEventListener('mouseleave', function () {
+        outer.style.opacity = '0';
+        inner.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', function () {
+        if (visible) {
+            outer.style.opacity = '1';
+            inner.style.opacity = '1';
         }
-    }
+    });
 
-    /* ── INIT ── */
-    function init() {
-        injectStyles();
-        buildDOM();
-        document.addEventListener('mousemove', onMouseMove, { passive: true });
-        document.addEventListener('click', onMouseClick, { passive: true });
-        document.addEventListener('mouseover', onMouseOver, { passive: true });
-        // Hide cursor if mouse leaves window
-        document.addEventListener('mouseleave', () => {
-            cursorEl.style.opacity = '0';
-            dotEl.style.opacity = '0';
-        });
-        document.addEventListener('mouseenter', () => {
-            cursorEl.style.opacity = '1';
-            dotEl.style.opacity = '1';
-        });
-        animFrame = requestAnimationFrame(loop);
-    }
+    /* Hover effect — outer ring expands slightly */
+    document.addEventListener('mouseover', function (e) {
+        var t = e.target;
+        var isInteractive = t.closest('a, button, input, label, [role="button"], .challenge-button, .nav-link');
+        if (isInteractive && !hovering) {
+            hovering = true;
+            outer.style.width = (OUTER_SIZE * 1.5) + 'px';
+            outer.style.height = (OUTER_SIZE * 1.5) + 'px';
+            outer.style.borderColor = '#e8c97a';
+        } else if (!isInteractive && hovering) {
+            hovering = false;
+            outer.style.width = OUTER_SIZE + 'px';
+            outer.style.height = OUTER_SIZE + 'px';
+            outer.style.borderColor = GOLD;
+        }
+    });
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    /* Click ripple — quick pulse on outer ring */
+    document.addEventListener('click', function () {
+        outer.style.transform += ' scale(1.6)';
+        outer.style.opacity = '0.3';
+        setTimeout(function () {
+            outer.style.opacity = '1';
+        }, 180);
+    });
+
+    /* ── START ── */
+    requestAnimationFrame(loop);
 })();

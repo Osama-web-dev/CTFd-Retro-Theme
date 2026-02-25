@@ -1,0 +1,50 @@
+from CTFd import create_app
+from CTFd.models import Pages, db
+
+app = create_app()
+with app.app_context():
+    page = Pages.query.filter_by(route='index').first()
+    if page:
+        hero_css = (
+            '<style>'
+            '.episode-zero-hero{min-height:85vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 20px;position:relative;z-index:10;}'
+            '.hero-inner{max-width:900px;background:rgba(30,26,22,0.88);border:1px solid #3b2a1e;padding:60px 40px;backdrop-filter:blur(6px);box-shadow:0 0 0 1px rgba(196,169,98,0.06),0 20px 60px rgba(0,0,0,0.6);position:relative;}'
+            '.ez-title{font-family:"Playfair Display",Georgia,serif;font-size:clamp(2.4rem,7vw,4rem);font-weight:900;letter-spacing:6px;color:#f4ead5;text-shadow:0 4px 12px rgba(0,0,0,0.9);margin:0;}'
+            '.ez-subtitle{font-family:"Special Elite",Georgia,serif;font-size:clamp(1rem,3vw,1.5rem);margin-top:10px;color:#c4a962;letter-spacing:0.1em;}'
+            '.ez-tagline{font-style:italic;margin-top:8px;color:rgba(244,234,213,0.6);font-size:.95rem;}'
+            '.ez-divider{width:80px;height:2px;background:linear-gradient(90deg,transparent,#c4a962,transparent);margin:30px auto;}'
+            '.ez-content p{margin-bottom:18px;color:rgba(244,234,213,0.85);line-height:1.8;font-size:.95rem;}'
+            '.ez-final-line{margin-top:30px!important;font-family:"Special Elite",Georgia,serif;font-size:1.05rem;color:#c56a2d!important;}'
+            '.ez-cta{margin-top:36px;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}'
+            '.ez-button{display:inline-block;padding:12px 32px;border:1px solid #c4a962;color:#c4a962;font-family:"Special Elite",Georgia,serif;letter-spacing:.12em;text-decoration:none;background:rgba(196,169,98,0.06);transition:all .3s ease;font-size:.9rem;}'
+            '.ez-button:hover{background:#c4a962;color:#12100e;text-decoration:none;}'
+            '.ez-button-ghost{border-color:rgba(196,169,98,0.3);color:rgba(244,234,213,0.6);background:transparent;}'
+            '.ez-button-ghost:hover{background:rgba(196,169,98,0.08);color:#f4ead5;}'
+            '</style>'
+        )
+        hero_html = (
+            '<section class="episode-zero-hero">'
+            '<div class="hero-inner">'
+            '<h1 class="ez-title">EPISODE ZERO</h1>'
+            '<h2 class="ez-subtitle">Capture the Flag</h2>'
+            '<p class="ez-tagline">&ldquo;Rewrite the story from the beginning.&rdquo;</p>'
+            '<div class="ez-divider"></div>'
+            '<div class="ez-content">'
+            '<p>Every universe begins with a version that was erased.<br>A timeline before the collapse. A memory that should not exist.</p>'
+            '<p>Welcome to Episode Zero &mdash; where narratives glitch, realities fork, and the origin story is still writable.</p>'
+            '<p>Inspired by time-loop paradoxes, fractured identities, cyberpunk rebellions, psychological thrillers, and alternate realities &mdash; every challenge is a fragment of a corrupted story.</p>'
+            '<p>Web. Crypto. Pwn. Forensics. OSINT.<br>Each flag rewrites the timeline.</p>'
+            '<p class="ez-final-line">The story has already been written.<br>You are here to break it.</p>'
+            '</div>'
+            '<div class="ez-cta">'
+            '<a href="/challenges" class="ez-button">Enter Episode</a>'
+            '<a href="/register" class="ez-button ez-button-ghost">Register</a>'
+            '</div>'
+            '</div>'
+            '</section>'
+        )
+        page.content = hero_css + hero_html
+        db.session.commit()
+        print('SUCCESS: Episode Zero index page written to DB')
+    else:
+        print('INFO: No index page found in DB (CTFd not set up yet)')

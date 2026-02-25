@@ -1,845 +1,170 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    /* ═══════════════════════════════════════════════
-     EPISODE ZERO — Index Page
-     Dark walnut · Muted gold · Cream · Grain · Glow
-     ═══════════════════════════════════════════════ */
+<section class="episode-zero-hero">
+    <div class="hero-inner">
 
-    /* ─── HERO SECTION ─── */
-    .ep0-hero {
+        <h1 class="ez-title">EPISODE ZERO</h1>
+        <h2 class="ez-subtitle">Capture the Flag</h2>
+        <p class="ez-tagline">"Rewrite the story from the beginning."</p>
+
+        <div class="ez-divider"></div>
+
+        <div class="ez-content">
+            <p>
+                Every universe begins with a version that was erased.
+                A timeline before the collapse.
+                A memory that shouldn't exist.
+            </p>
+            <p>
+                Welcome to Episode Zero — where narratives glitch,
+                realities fork, and the origin story is still writable.
+            </p>
+            <p>
+                Inspired by time-loop paradoxes, fractured identities,
+                cyberpunk rebellions, psychological thrillers,
+                and alternate realities — every challenge is a
+                fragment of a corrupted story.
+            </p>
+            <p>
+                Web. Crypto. Pwn. Forensics. OSINT.<br>
+                Each flag rewrites the timeline.
+            </p>
+            <p class="ez-final-line">
+                The story has already been written.<br>
+                You are here to break it.
+            </p>
+        </div>
+
+        <div class="ez-cta">
+            {% if not User.authed() %}
+            <a href="{{ url_for('auth.register') }}" class="ez-button">Begin the Reset</a>
+            <a href="{{ url_for('auth.login') }}" class="ez-button ez-button-ghost">Authenticate</a>
+            {% else %}
+            <a href="{{ url_for('challenges.listing') }}" class="ez-button">Enter Episode</a>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+
+<style>
+    .episode-zero-hero {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 80px 20px;
         position: relative;
-        padding: 5rem 0 3.5rem;
-        overflow: hidden;
-        border-bottom: 1px solid var(--border);
+        z-index: 10;
     }
 
-    .ep0-hero::before {
+    .hero-inner {
+        max-width: 900px;
+        background: rgba(30, 26, 22, 0.88);
+        border: 1px solid #3b2a1e;
+        padding: 60px 40px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 0 0 1px rgba(196, 169, 98, 0.06), 0 20px 60px rgba(0, 0, 0, 0.6);
+        position: relative;
+    }
+
+    .hero-inner::before {
         content: '';
         position: absolute;
-        inset: 0;
-        background:
-            radial-gradient(ellipse at 50% 0%, rgba(196, 169, 98, 0.06) 0%, transparent 65%),
-            linear-gradient(to bottom, #1a1208 0%, var(--bg) 100%);
-        pointer-events: none;
-        z-index: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(196, 169, 98, 0.5), transparent);
     }
 
-    .ep0-hero-inner {
-        position: relative;
-        z-index: 5;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 1.2rem;
-    }
-
-    /* Tape label top strip */
-    .ep0-tape-label {
-        display: inline-block;
-        background: linear-gradient(90deg, rgba(196, 169, 98, 0.08), rgba(196, 169, 98, 0.18), rgba(196, 169, 98, 0.08));
-        border: 1px solid rgba(196, 169, 98, 0.3);
-        color: var(--accent);
-        font-size: 0.72rem;
-        letter-spacing: 0.22em;
-        padding: 0.35rem 1.6rem;
-        border-radius: 2px;
-        text-transform: uppercase;
-        animation: tape-pulse 4s ease-in-out infinite;
-    }
-
-    @keyframes tape-pulse {
-
-        0%,
-        100% {
-            opacity: 0.7;
-        }
-
-        50% {
-            opacity: 1;
-        }
-    }
-
-    .ep0-tape-label::before {
-        content: '▶ ';
-    }
-
-    .ep0-tape-label::after {
-        content: ' ◀';
-    }
-
-    /* Main title */
-    .ep0-title {
-        font-family: 'Playfair Display', Georgia, serif !important;
-        font-size: clamp(3rem, 8vw, 5.5rem);
+    .ez-title {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: clamp(2.4rem, 7vw, 4rem);
         font-weight: 900;
-        color: var(--text) !important;
-        letter-spacing: -0.01em;
-        line-height: 1.1;
-        text-shadow: 0 0 40px rgba(196, 169, 98, 0.12), 0 2px 8px rgba(0, 0, 0, 0.9);
+        letter-spacing: 6px;
+        color: #f4ead5;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
         margin: 0;
     }
 
-    .ep0-title-accent {
-        color: var(--accent);
-    }
-
-    .ep0-tagline {
+    .ez-subtitle {
         font-family: 'Special Elite', Georgia, serif;
-        font-size: clamp(0.85rem, 2vw, 1.1rem);
-        color: var(--text-muted);
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
+        font-size: clamp(1rem, 3vw, 1.5rem);
+        margin-top: 10px;
+        color: #c4a962;
+        letter-spacing: 0.1em;
     }
 
-    /* CTF active badge */
-    .ep0-live-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: rgba(197, 106, 45, 0.1);
-        border: 1px solid rgba(197, 106, 45, 0.35);
-        color: var(--accent-2);
-        font-size: 0.78rem;
-        letter-spacing: 0.12em;
-        padding: 0.4rem 1.1rem;
-        border-radius: 2px;
-    }
-
-    .ep0-live-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--accent-2);
-        animation: live-pulse 1.5s ease-in-out infinite;
-        box-shadow: 0 0 6px var(--accent-2);
-    }
-
-    @keyframes live-pulse {
-
-        0%,
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        50% {
-            opacity: 0.4;
-            transform: scale(0.7);
-        }
-    }
-
-    /* Hero cassette illustration */
-    .ep0-cassette-wrap {
-        position: relative;
-        width: 180px;
-        height: 120px;
-        margin: 0 auto;
-    }
-
-    .ep0-cassette-glow {
-        position: absolute;
-        inset: -20px;
-        background: radial-gradient(ellipse, rgba(196, 169, 98, 0.08) 0%, transparent 70%);
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    /* ─── COUNTDOWN ─── */
-    .ep0-countdown-section {
-        padding: 2.5rem 0;
-        border-bottom: 1px solid var(--border);
-        position: relative;
-        z-index: 5;
-    }
-
-    .ep0-countdown-label {
-        font-family: 'Special Elite', Georgia, serif;
-        color: var(--text-muted);
-        font-size: 0.75rem;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        text-align: center;
-        margin-bottom: 1.5rem;
-    }
-
-    .ep0-countdown-grid {
-        display: flex;
-        justify-content: center;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-    }
-
-    .ep0-count-unit {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 3px;
-        padding: 1rem 1.5rem;
-        text-align: center;
-        min-width: 80px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(196, 169, 98, 0.06);
-        position: relative;
-    }
-
-    .ep0-count-unit::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, var(--accent), transparent);
-        border-radius: 3px 3px 0 0;
-    }
-
-    .ep0-count-num {
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 2.2rem;
-        font-weight: 600;
-        line-height: 1;
-        color: var(--accent);
-        text-shadow: 0 0 12px rgba(196, 169, 98, 0.3);
-        display: block;
-    }
-
-    .ep0-count-label {
-        font-family: 'Special Elite', Georgia, serif;
-        font-size: 0.68rem;
-        letter-spacing: 0.15em;
-        color: var(--text-muted);
-        margin-top: 0.4rem;
-        display: block;
-        text-transform: uppercase;
-    }
-
-    /* ─── NARRATIVE SECTIONS ─── */
-    .ep0-narrative {
-        padding: 3rem 0;
-        border-bottom: 1px solid var(--border);
-        position: relative;
-        z-index: 5;
-    }
-
-    .ep0-classified-doc {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 3px;
-        padding: 2.5rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        position: relative;
-    }
-
-    .ep0-classified-doc::before {
-        content: 'CLASSIFIED // EPISODE_ZERO // CLEARANCE: SIGMA';
-        position: absolute;
-        top: -1px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--accent-2);
-        color: var(--bg);
-        font-size: 0.6rem;
-        letter-spacing: 0.15em;
-        padding: 0.2rem 1rem;
-        border-radius: 0 0 3px 3px;
-        white-space: nowrap;
-    }
-
-    .ep0-section-stamp {
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 0.65rem;
-        letter-spacing: 0.2em;
-        color: var(--accent);
-        opacity: 0.6;
-        text-transform: uppercase;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-
-    .ep0-section-heading {
-        font-family: 'Special Elite', Georgia, serif !important;
-        color: var(--accent) !important;
-        font-size: 1.05rem;
-        letter-spacing: 0.12em;
-        text-shadow: 0 0 6px rgba(196, 169, 98, 0.2);
-        border-left: 3px solid var(--accent-2);
-        padding-left: 0.8rem;
-        margin-bottom: 1rem;
-        margin-top: 2rem;
-    }
-
-    .ep0-section-heading:first-of-type {
-        margin-top: 1.5rem;
-    }
-
-    .ep0-body-text {
-        color: var(--text-muted);
-        font-size: 0.92rem;
-        line-height: 1.85;
-    }
-
-    .ep0-body-text strong,
-    .ep0-body-text b {
-        color: var(--text);
-        font-weight: 700;
-    }
-
-    .ep0-lore-quote {
-        border-left: 2px solid rgba(196, 169, 98, 0.25);
-        margin: 1.5rem 0;
-        padding: 0.8rem 1.2rem;
+    .ez-tagline {
         font-style: italic;
-        color: rgba(244, 234, 213, 0.55);
-        font-size: 0.88rem;
-        line-height: 1.9;
+        margin-top: 8px;
+        color: rgba(244, 234, 213, 0.6);
+        font-size: 0.95rem;
     }
 
-    /* Category challenge grid */
-    .ep0-cat-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-top: 1.5rem;
-    }
-
-    .ep0-cat-card {
-        background: var(--panel-2);
-        border: 1px solid var(--border);
-        border-radius: 3px;
-        padding: 1.2rem 1rem;
-        text-align: center;
-        transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .ep0-cat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
+    .ez-divider {
+        width: 80px;
         height: 2px;
-        opacity: 0;
-        transition: opacity 0.2s;
+        background: linear-gradient(90deg, transparent, #c4a962, transparent);
+        margin: 30px auto;
     }
 
-    .ep0-cat-card:hover {
-        border-color: var(--border-2);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-        transform: translateY(-2px);
+    .ez-content p {
+        margin-bottom: 18px;
+        color: rgba(244, 234, 213, 0.85);
+        line-height: 1.8;
+        font-size: 0.95rem;
     }
 
-    .ep0-cat-card:hover::before {
-        opacity: 1;
-    }
-
-    .ep0-cat-icon {
-        font-size: 1.8rem;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-
-    .ep0-cat-name {
+    .ez-final-line {
+        margin-top: 30px !important;
         font-family: 'Special Elite', Georgia, serif;
-        color: var(--accent);
-        font-size: 0.88rem;
-        letter-spacing: 0.08em;
-        display: block;
+        font-size: 1.05rem;
+        color: #c56a2d !important;
+        text-shadow: 0 0 8px rgba(197, 106, 45, 0.3);
     }
 
-    .ep0-cat-desc {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        margin-top: 0.3rem;
-        line-height: 1.5;
-    }
-
-    /* ─── HALL OF HACKERS TEASER ─── */
-    .ep0-hoh {
-        padding: 3rem 0;
-        position: relative;
-        z-index: 5;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .ep0-hoh-panel {
-        background: linear-gradient(160deg, #1a1208 0%, var(--panel) 100%);
-        border: 1px solid var(--border);
-        border-top: 3px solid var(--accent);
-        border-radius: 3px;
-        padding: 2rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        text-align: center;
-    }
-
-    .ep0-hoh-title {
-        font-family: 'Playfair Display', Georgia, serif !important;
-        color: var(--accent) !important;
-        font-size: 1.8rem;
-        font-weight: 900;
-        text-shadow: 0 0 20px rgba(196, 169, 98, 0.25);
-        margin-bottom: 0.5rem;
-    }
-
-    .ep0-hoh-sub {
-        color: var(--text-muted);
-        font-size: 0.85rem;
-        letter-spacing: 0.1em;
-        margin-bottom: 1.5rem;
-    }
-
-    .ep0-hoh-stats {
-        display: flex;
-        justify-content: center;
-        gap: 3rem;
-        flex-wrap: wrap;
-        margin-top: 1.5rem;
-    }
-
-    .ep0-stat {
-        text-align: center;
-    }
-
-    .ep0-stat-num {
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 2rem;
-        color: var(--accent);
-        text-shadow: 0 0 10px rgba(196, 169, 98, 0.3);
-        display: block;
-        line-height: 1;
-    }
-
-    .ep0-stat-label {
-        font-size: 0.72rem;
-        color: var(--text-muted);
-        letter-spacing: 0.12em;
-        margin-top: 0.3rem;
-        display: block;
-        text-transform: uppercase;
-    }
-
-    /* ─── FOOTER HOOK ─── */
-    .ep0-hook-line {
-        padding: 3rem 0;
-        text-align: center;
-        position: relative;
-        z-index: 5;
-    }
-
-    .ep0-hook-text {
-        font-family: 'Playfair Display', Georgia, serif;
-        font-size: clamp(1.4rem, 4vw, 2.2rem);
-        font-weight: 900;
-        color: var(--text);
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-        line-height: 1.4;
-    }
-
-    .ep0-hook-text em {
-        color: var(--accent);
-        font-style: normal;
-        text-shadow: 0 0 16px rgba(196, 169, 98, 0.3);
-    }
-
-    .ep0-hook-sub {
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        letter-spacing: 0.12em;
-        margin-top: 0.8rem;
-    }
-
-    /* ─── SCAN LINES EFFECT (subtle) ─── */
-    .ep0-scanlines {
-        position: fixed;
-        inset: 0;
-        background: repeating-linear-gradient(0deg,
-                transparent 0px, transparent 3px,
-                rgba(0, 0, 0, 0.04) 3px, rgba(0, 0, 0, 0.04) 4px);
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    /* ─── ACTION BUTTONS ─── */
-    .ep0-cta {
+    .ez-cta {
+        margin-top: 36px;
         display: flex;
         gap: 1rem;
-        flex-wrap: wrap;
         justify-content: center;
-        margin-top: 1.5rem;
+        flex-wrap: wrap;
     }
 
-    .ep0-btn-primary {
+    .ez-button {
+        display: inline-block;
+        padding: 12px 32px;
+        border: 1px solid #c4a962;
+        color: #c4a962;
         font-family: 'Special Elite', Georgia, serif;
-        background: linear-gradient(180deg, #3a2810, #1a1008);
-        border: 1px solid var(--accent);
-        color: var(--accent);
-        padding: 0.7rem 2rem;
-        border-radius: 3px;
-        letter-spacing: 0.1em;
-        transition: all 0.2s;
+        letter-spacing: 0.12em;
         text-decoration: none;
-        cursor: pointer;
-        box-shadow: 0 2px 0 #0a0806, 0 4px 12px rgba(0, 0, 0, 0.4);
-    }
-
-    .ep0-btn-primary:hover {
-        background: linear-gradient(180deg, #4a3418, #2a1810);
-        color: #e8c97a;
-        transform: translateY(-1px);
-        box-shadow: 0 3px 0 #0a0806, 0 6px 16px rgba(0, 0, 0, 0.5);
-        text-decoration: none;
-    }
-
-    .ep0-btn-secondary {
-        font-family: 'Special Elite', Georgia, serif;
-        background: transparent;
-        border: 1px solid var(--border);
-        color: var(--text-muted);
-        padding: 0.7rem 2rem;
-        border-radius: 3px;
-        letter-spacing: 0.08em;
-        transition: all 0.2s;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .ep0-btn-secondary:hover {
-        border-color: var(--border-2);
-        color: var(--text);
         background: rgba(196, 169, 98, 0.06);
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .ez-button:hover {
+        background: #c4a962;
+        color: #12100e;
+        box-shadow: 0 4px 16px rgba(196, 169, 98, 0.25);
         text-decoration: none;
     }
 
-    /* Cassette reel spin */
-    @keyframes reel-spin {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
+    .ez-button-ghost {
+        border-color: rgba(196, 169, 98, 0.3);
+        color: rgba(244, 234, 213, 0.6);
+        background: transparent;
     }
 
-    .ep0-reel-spin {
-        animation: reel-spin 4s linear infinite;
-        transform-origin: center;
-        transform-box: fill-box;
+    .ez-button-ghost:hover {
+        background: rgba(196, 169, 98, 0.08);
+        color: #f4ead5;
+        border-color: rgba(196, 169, 98, 0.5);
     }
 </style>
-
-<!-- Scan lines (atmosphere) -->
-<div class="ep0-scanlines" aria-hidden="true"></div>
-
-<!-- ═══ HERO ═══ -->
-<section class="ep0-hero">
-    <div class="container">
-        <div class="ep0-hero-inner">
-
-            <span class="ep0-tape-label">EP0.RESET</span>
-
-            <!-- Cassette SVG illustration -->
-            <div class="ep0-cassette-wrap" aria-hidden="true">
-                <div class="ep0-cassette-glow"></div>
-                <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" style="width:180px;">
-                    <rect x="4" y="12" width="232" height="136" rx="10" fill="#1e1a16" stroke="#3b2a1e"
-                        stroke-width="2.5" />
-                    <rect x="18" y="26" width="204" height="100" rx="6" fill="#12100e" />
-                    <!-- Reels -->
-                    <g transform="translate(72,76)">
-                        <circle r="32" fill="#1e1a16" stroke="#3b2a1e" stroke-width="2" />
-                        <circle r="18" fill="#12100e" stroke="#c4a962" stroke-width="1.5" class="ep0-reel-spin" />
-                        <line x1="0" y1="-18" x2="0" y2="-10" stroke="#c4a962" stroke-width="1.5"
-                            class="ep0-reel-spin" />
-                        <line x1="15.6" y1="9" x2="8.7" y2="5" stroke="#c4a962" stroke-width="1.5"
-                            class="ep0-reel-spin" />
-                        <line x1="-15.6" y1="9" x2="-8.7" y2="5" stroke="#c4a962" stroke-width="1.5"
-                            class="ep0-reel-spin" />
-                        <circle r="6" fill="#c4a962" />
-                        <circle r="3" fill="#12100e" />
-                    </g>
-                    <g transform="translate(168,76)">
-                        <circle r="32" fill="#1e1a16" stroke="#3b2a1e" stroke-width="2" />
-                        <circle r="18" fill="#12100e" stroke="#c4a962" stroke-width="1.5" class="ep0-reel-spin" />
-                        <line x1="0" y1="-18" x2="0" y2="-10" stroke="#c4a962" stroke-width="1.5"
-                            class="ep0-reel-spin" />
-                        <line x1="15.6" y1="9" x2="8.7" y2="5" stroke="#c4a962" stroke-width="1.5"
-                            class="ep0-reel-spin" />
-                        <line x1="-15.6" y1="9" x2="-8.7" y2="5" stroke="#c4a962" stroke-width="1.5"
-                            class="ep0-reel-spin" />
-                        <circle r="6" fill="#c4a962" />
-                        <circle r="3" fill="#12100e" />
-                    </g>
-                    <!-- Tape window -->
-                    <rect x="96" y="46" width="48" height="28" rx="4" fill="#2f8f9d" opacity="0.25" />
-                    <!-- Label -->
-                    <rect x="18" y="108" width="204" height="22" rx="3" fill="#2a1e10" />
-                    <text x="120" y="123" text-anchor="middle" font-family="Courier Prime, monospace" font-size="9"
-                        fill="#c4a962" letter-spacing="3">EP0 · RESET · SIDE A</text>
-                    <!-- Corner labels -->
-                    <text x="26" y="42" font-family="monospace" font-size="7" fill="rgba(196,169,98,0.35)">REC</text>
-                    <text x="196" y="42" font-family="monospace" font-size="7" fill="rgba(196,169,98,0.35)">EP0</text>
-                </svg>
-            </div>
-
-            <h1 class="ep0-title">
-                Episode<br>
-                <span class="ep0-title-accent">Zero<span
-                        style="font-size:0.45em; vertical-align:super; opacity:0.7;">⁰</span></span>
-            </h1>
-
-            <p class="ep0-tagline">Rewrite the story from the beginning.</p>
-
-            {% if Configs.ctf_description %}
-            <p style="color:var(--text-muted); max-width:520px; text-align:center; font-size:0.9rem; line-height:1.7;">
-                {{ Configs.ctf_description }}</p>
-            {% endif %}
-
-            <div class="ep0-live-badge">
-                <span class="ep0-live-dot"></span>
-                <span>{{ Configs.ctf_name }} — LIVE</span>
-            </div>
-
-            <div class="ep0-cta">
-                {% if not User.authed() %}
-                <a href="{{ url_for('auth.register') }}" class="ep0-btn-primary">▶ ENTER THE TIMELINE</a>
-                <a href="{{ url_for('auth.login') }}" class="ep0-btn-secondary">AUTHENTICATE</a>
-                {% else %}
-                <a href="{{ url_for('challenges.listing') }}" class="ep0-btn-primary">▶ ACCESS CHALLENGES</a>
-                <a href="{{ url_for('scoreboard.listing') }}" class="ep0-btn-secondary">HALL OF HACKERS</a>
-                {% endif %}
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- ═══ COUNTDOWN ═══ -->
-{% if Configs.start or Configs.end %}
-<section class="ep0-countdown-section">
-    <div class="container">
-        <p class="ep0-countdown-label">— Timeline Integrity —</p>
-        <div class="ep0-countdown-grid" id="ep0-countdown">
-            <div class="ep0-count-unit">
-                <span class="ep0-count-num" id="ep0-days">00</span>
-                <span class="ep0-count-label">Days</span>
-            </div>
-            <div class="ep0-count-unit">
-                <span class="ep0-count-num" id="ep0-hours">00</span>
-                <span class="ep0-count-label">Hours</span>
-            </div>
-            <div class="ep0-count-unit">
-                <span class="ep0-count-num" id="ep0-mins">00</span>
-                <span class="ep0-count-label">Minutes</span>
-            </div>
-            <div class="ep0-count-unit">
-                <span class="ep0-count-num" id="ep0-secs">00</span>
-                <span class="ep0-count-label">Seconds</span>
-            </div>
-        </div>
-        <p id="ep0-countdown-status"
-            style="text-align:center; color:var(--text-muted); font-size:0.78rem; margin-top:0.8rem; letter-spacing:0.1em;">
-        </p>
-    </div>
-</section>
-{% endif %}
-
-<!-- ═══ NARRATIVE / CLASSIFIED DOC ═══ -->
-<section class="ep0-narrative">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-9">
-                <div class="ep0-classified-doc">
-
-                    <h2 class="ep0-section-heading">
-                        <span class="ep0-section-stamp">// MISSION BRIEFING //</span>
-                        The Concept
-                    </h2>
-                    <p class="ep0-body-text">
-                        Across anime, series, games, and cinematic worlds, there is one recurring truth:<br><br>
-                        <em class="ep0-lore-quote">
-                            The strongest characters are forged in rewritten timelines.<br>
-                            When heroes rewind fate. When villains reset the board.<br>
-                            When memories fracture. When alternate realities collide.
-                        </em>
-                        This CTF draws inspiration from <strong>time-loop paradox arcs</strong>, <strong>multiverse
-                            collapses</strong>,
-                        <strong>memory manipulation</strong>, <strong>digital dystopias</strong>, <strong>hidden
-                            identities</strong>,
-                        and the <em style="color:var(--accent-2);">"what if"</em> timeline.
-                        Every challenge is a piece of a broken narrative.
-                    </p>
-                    <p class="ep0-body-text" style="margin-top:1rem;">
-                        <strong>Your mission?</strong> Reconstruct it.
-                    </p>
-
-                    <h2 class="ep0-section-heading">
-                        <span class="ep0-section-stamp">// CHALLENGE MANIFEST //</span>
-                        What Awaits You
-                    </h2>
-                    <div class="ep0-cat-grid">
-                        <div class="ep0-cat-card" style="border-top:2px solid #3fb8af;">
-                            <span class="ep0-cat-icon">🌐</span>
-                            <span class="ep0-cat-name">Web</span>
-                            <span class="ep0-cat-desc">Realities that lie to you</span>
-                        </div>
-                        <div class="ep0-cat-card" style="border-top:2px solid #c56a2d;">
-                            <span class="ep0-cat-icon">💀</span>
-                            <span class="ep0-cat-name">Pwn</span>
-                            <span class="ep0-cat-desc">Binaries hiding alternate states</span>
-                        </div>
-                        <div class="ep0-cat-card" style="border-top:2px solid #c4a962;">
-                            <span class="ep0-cat-icon">🔐</span>
-                            <span class="ep0-cat-name">Crypto</span>
-                            <span class="ep0-cat-desc">Puzzles encoded like forgotten prophecies</span>
-                        </div>
-                        <div class="ep0-cat-card" style="border-top:2px solid #8b2e2e;">
-                            <span class="ep0-cat-icon">🔍</span>
-                            <span class="ep0-cat-name">Forensics</span>
-                            <span class="ep0-cat-desc">Trails buried in corrupted timelines</span>
-                        </div>
-                        <div class="ep0-cat-card" style="border-top:2px solid #2f8f9d;">
-                            <span class="ep0-cat-icon">🌍</span>
-                            <span class="ep0-cat-name">OSINT</span>
-                            <span class="ep0-cat-desc">Mysteries scattered across dimensions</span>
-                        </div>
-                    </div>
-
-                    <h2 class="ep0-section-heading">
-                        <span class="ep0-section-stamp">// LORE FILE EP0-001 //</span>
-                        The Lore
-                    </h2>
-                    <p class="ep0-body-text">
-                        Somewhere in the system, there exists <strong>a master narrative file</strong>.
-                    </p>
-                    <div class="ep0-lore-quote">
-                        Corrupted. Fragmented. Split across categories.<br><br>
-                        Rumor says the first team to fully decode it will uncover:<br>
-                        <strong style="color:var(--text);">The Origin. The true Episode Zero.</strong>
-                    </div>
-                    <p class="ep0-body-text">
-                        Each flag <em style="color:var(--accent-2);">rewrites the story</em>.
-                        Each solve <em style="color:var(--accent-2);">pushes the timeline forward</em>.
-                        Each failure… <em style="color:rgba(244,234,213,0.35);">resets the arc</em>.
-                    </p>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══ HALL OF HACKERS TEASER ═══ -->
-<section class="ep0-hoh">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="ep0-hoh-panel">
-                    <h2 class="ep0-hoh-title">★ Hall of Hackers ★</h2>
-                    <p class="ep0-hoh-sub">
-                        Only those who understand the pattern behind the chaos will rise.<br>
-                        The leaderboard is not just ranking skill — it is tracking control over the narrative.
-                    </p>
-                    <a href="{{ url_for('scoreboard.listing') }}" class="ep0-btn-secondary" style="font-size:0.82rem;">
-                        VIEW SCOREBOARD →
-                    </a>
-                    <div class="ep0-hoh-stats" x-data="ScoreboardList" style="margin-top:2rem;">
-                        <div class="ep0-stat">
-                            <span class="ep0-stat-num" x-text="standings ? standings.length : '—'">—</span>
-                            <span class="ep0-stat-label">Teams Competing</span>
-                        </div>
-                        <div class="ep0-stat" style="border-left:1px solid var(--border); padding-left:3rem;">
-                            <span class="ep0-stat-num"
-                                x-text="standings && standings[0] ? standings[0].name : '—'">—</span>
-                            <span class="ep0-stat-label">Current Leader</span>
-                        </div>
-                        <div class="ep0-stat" style="border-left:1px solid var(--border); padding-left:3rem;">
-                            <span class="ep0-stat-num"
-                                x-text="standings && standings[0] ? standings[0].score : '—'">—</span>
-                            <span class="ep0-stat-label">Top Score</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══ FINAL HOOK ═══ -->
-<section class="ep0-hook-line">
-    <div class="container">
-        <p class="ep0-hook-text">
-            The story has already been written.<br>
-            <em>Your job is to break it.</em>
-        </p>
-        <p class="ep0-hook-sub">— EP0.RESET · CLEARANCE SIGMA · {{ Configs.ctf_name }} —</p>
-        {% if not User.authed() %}
-        <div class="ep0-cta" style="margin-top:2rem;">
-            <a href="{{ url_for('auth.register') }}" class="ep0-btn-primary">▶ BEGIN THE RESET</a>
-        </div>
-        {% endif %}
-    </div>
-</section>
-
-<!-- ═══ COUNTDOWN JS ═══ -->
-{% if Configs.start or Configs.end %}
-<script>
-    (function () {
-        var startTs = {{ Configs.start | tojson
-    }};
-    var endTs = {{ Configs.end   | tojson }};
-
-    function pad(n) { return String(Math.max(0, Math.floor(n))).padStart(2, '0'); }
-
-    function tick() {
-        var now = Date.now() / 1000;
-        var target, statusMsg;
-
-        if (startTs && now < startTs) {
-            target = startTs;
-            statusMsg = '⚡ TIMELINE INITIALIZING — CTF HAS NOT STARTED';
-        } else if (endTs && now < endTs) {
-            target = endTs;
-            statusMsg = '🔴 TIMELINE ACTIVE — EPISODE ZERO IN PROGRESS';
-        } else if (endTs && now >= endTs) {
-            document.getElementById('ep0-days').textContent = '00';
-            document.getElementById('ep0-hours').textContent = '00';
-            document.getElementById('ep0-mins').textContent = '00';
-            document.getElementById('ep0-secs').textContent = '00';
-            var st = document.getElementById('ep0-countdown-status');
-            if (st) st.textContent = '✅ CTF HAS ENDED — THE TIMELINE IS CLOSED';
-            return;
-        } else {
-            return;
-        }
-
-        var diff = Math.max(0, target - now);
-        var d = diff / 86400;
-        var h = (diff % 86400) / 3600;
-        var m = (diff % 3600) / 60;
-        var s = diff % 60;
-
-        document.getElementById('ep0-days').textContent = pad(d);
-        document.getElementById('ep0-hours').textContent = pad(h);
-        document.getElementById('ep0-mins').textContent = pad(m);
-        document.getElementById('ep0-secs').textContent = pad(s);
-
-        var st = document.getElementById('ep0-countdown-status');
-        if (st) st.textContent = statusMsg;
-
-        setTimeout(tick, 1000);
-    }
-
-    tick();
-}) ();
-</script>
-{% endif %}
-
-{% endblock %}
-
-{% block scripts %}
-{{ super() }}
-{{ Assets.js("assets/js/scoreboard.js") }}
 {% endblock %}
