@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ Configs.ctf_name }}</title>
+
+    <link rel="shortcut icon" href="{{ Configs.ctf_small_icon }}" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ══════════════════════════════════════════════
+           ANALOG RETRO INDEX PAGE — STARGAZE THEME
+           ══════════════════════════════════════════════ */
+        :root {
+            --parchment: #f4ead5;
+            --cream: #efe2c6;
+            --paper-tan: #d2b48c;
+            --walnut: #3b2a1e;
+            --ink-brown: #1e1a16;
+            --teal: #2f8f9d;
+            --burnt-orange: #c56a2d;
+            --coral: #e76f51;
+            --vintage-red: #8b2e2e;
+            --muted-gold: #c4a962;
+            --turquoise: #3fb8af;
+            --text-muted: rgba(59, 42, 30, 0.55);
+            --border-warm: rgba(196, 169, 98, 0.45);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--parchment);
+            color: var(--ink-brown);
+            font-family: 'Courier Prime', monospace;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--paper-tan);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #5c3d26 0%, #3b2a1e 50%, #6b4c35 100%);
+            border-radius: 3px;
+        }
+
+        /* ── PAPER GRAIN OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Vignette */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 55%, rgba(30, 26, 22, 0.5) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── NAVBAR ── */
+        .retro-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: linear-gradient(180deg, #4a3220 0%, #3b2a1e 50%, #2e2016 100%);
+            border-bottom: 3px solid var(--muted-gold);
+            box-shadow: 0 3px 16px rgba(30, 26, 22, 0.5);
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .retro-nav .brand {
+            font-family: 'Special Elite', Georgia, serif;
+            color: var(--muted-gold);
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+        }
+
+        .retro-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0.25rem;
+            align-items: center;
+        }
+
+        .retro-nav a {
+            font-family: 'Special Elite', Georgia, serif;
+            color: rgba(239, 226, 198, 0.85);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            padding: 0.4rem 0.8rem;
+            border-radius: 3px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .retro-nav a:hover {
+            color: var(--muted-gold);
+            background: rgba(196, 169, 98, 0.12);
+        }
+
+        /* ── MAIN CONTENT ── */
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 7rem 2rem 4rem;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 5rem;
+            min-height: 60vh;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 1rem;
+            border: 1.5px solid var(--muted-gold);
+            background: rgba(196, 169, 98, 0.1);
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--burnt-orange);
+            margin-bottom: 1.5rem;
+            border-radius: 2px;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--burnt-orange);
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: scale(1.4);
+            }
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 900;
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
+            color: var(--walnut);
+            line-height: 1.05;
+            letter-spacing: -0.01em;
+            text-shadow:
+                2px 2px 0 rgba(196, 169, 98, 0.3),
+                4px 4px 12px rgba(59, 42, 30, 0.15);
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-tagline {
+            font-family: 'Courier Prime', monospace;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        /* ── CTA BUTTONS ── */
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 460px;
+        }
+
+        .cta-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-retro {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: 'Special Elite', Georgia, serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            border-radius: 3px;
+            padding: 0.75rem 1.6rem;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            position: relative;
+            border: none;
+        }
+
+        .btn-retro:active {
+            transform: translateY(2px);
+        }
+
+        .btn-primary-retro {
+            background: linear-gradient(180deg, #5a3b22 0%, #3b2a1e 100%);
+            color: var(--muted-gold);
+            border: 1px solid var(--muted-gold);
+            box-shadow: 0 4px 0 #1e1a16, 0 6px 12px rgba(0, 0, 0, 0.25);
+            flex: 1;
+        }
+
+        .btn-primary-retro:hover {
+            background: linear-gradient(180deg, #6b4c35 0%, #4a3525 100%);
+            color: #e8c97a;
+            box-shadow: 0 5px 0 #1e1a16, 0 8px 16px rgba(0, 0, 0, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary-retro {
+            background: linear-gradient(180deg, var(--cream) 0%, #ddd0b4 100%);
+            color: var(--walnut);
+            border: 1px solid var(--paper-tan);
+            box-shadow: 0 3px 0 rgba(59, 42, 30, 0.25);
+            flex: 1;
+        }
+
+        .btn-secondary-retro:hover {
+            border-color: var(--muted-gold);
+            transform: translateY(-1px);
+        }
+
+        .btn-sm-retro {
+            background: transparent;
+            color: var(--walnut);
+            border: 1px solid var(--border-warm);
+            font-size: 0.82rem;
+            padding: 0.55rem 1.1rem;
+            flex: 1;
+        }
+
+        .btn-sm-retro:hover {
+            background: rgba(196, 169, 98, 0.1);
+            border-color: var(--muted-gold);
+        }
+
+        /* ── COUNTDOWN ── */
+        .countdown-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 2.5rem;
+        }
+
+        .countdown-unit {
+            background: linear-gradient(160deg, var(--cream) 0%, var(--parchment) 100%);
+            border: 1px solid var(--border-warm);
+            border-radius: 3px;
+            padding: 0.8rem 1.1rem;
+            text-align: center;
+            min-width: 72px;
+            box-shadow: 2px 3px 0 rgba(59, 42, 30, 0.15);
+        }
+
+        .countdown-num {
+            display: block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--walnut);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            display: block;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        /* ── HERO VISUAL — CASSETTE ── */
+        .hero-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-visual svg {
+            width: 100%;
+            max-width: 380px;
+            filter: drop-shadow(0 8px 24px rgba(59, 42, 30, 0.25));
+            animation: hero-float 6s ease-in-out infinite;
+        }
+
+        @keyframes hero-float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-1deg);
+            }
+
+            50% {
+                transform: translateY(-14px) rotate(1deg);
+            }
+        }
+
+        /* ── CATEGORIES ── */
+        .section-heading {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--walnut);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2.5rem;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .category-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 4rem;
+        }
+
+        .category-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--cream);
+            border: 1px solid var(--border-warm);
+            border-radius: 2px;
+            padding: 0.5rem 1.1rem;
+            font-family: 'Special Elite', Georgia, serif;
+            font-size: 0.88rem;
+            color: var(--walnut);
+            box-shadow: 2px 2px 0 rgba(59, 42, 30, 0.12);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .category-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 3px 4px 0 rgba(59, 42, 30, 0.2);
+            border-color: var(--muted-gold);
+        }
+
+        .category-tag i {
+            font-size: 0.95rem;
+        }
+
+        /* ── INFO CARDS ── */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .info-card {
+            background: var(--cream);
+            border: 1px solid var(--border-warm);
+            border-radius: 3px;
+            padding: 1.6rem;
+            box-shadow: 3px 4px 0 rgba(59, 42, 30, 0.15);
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Paper tape top */
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 12px;
+            background: rgba(196, 169, 98, 0.5);
+            border-radius: 1px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 4px 6px 0 rgba(59, 42, 30, 0.2);
+        }
+
+        .info-card .card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .info-card .card-label {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+        }
+
+        .info-card .card-value {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--walnut);
+        }
+
+        .info-card .card-sub {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Prize card special */
+        .prize-card {
+            background: linear-gradient(160deg, #2e2016 0%, #3b2a1e 40%, #2a1e12 100%);
+            border-color: var(--muted-gold);
+            color: var(--cream);
+        }
+
+        .prize-card::before {
+            background: rgba(196, 169, 98, 0.3);
+        }
+
+        .prize-card .card-label {
+            color: rgba(239, 226, 198, 0.6);
+        }
+
+        .prize-card .card-value {
+            color: var(--muted-gold);
+            font-size: 2.2rem;
+            text-shadow: 0 0 12px rgba(196, 169, 98, 0.3);
+        }
+
+        .prize-card .card-sub {
+            color: rgba(239, 226, 198, 0.55);
+        }
+
+        .prize-card .trophies {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 4rem;
+            opacity: 0.1;
+        }
+
+        /* Internship card */
+        .intern-card .intern-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(196, 169, 98, 0.15);
+            border: 1px solid var(--border-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--burnt-orange);
+            margin-bottom: 0.75rem;
+            transition: background 0.2s;
+        }
+
+        .intern-card:hover .intern-icon {
+            background: var(--walnut);
+            color: var(--muted-gold);
+        }
+
+        /* ── FOOTER ── */
+        .retro-footer {
+            border-top: 2px solid var(--border-warm);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-label {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-brand {
+            font-family: 'Special Elite', Georgia, serif;
+            font-size: 1.2rem;
+            color: var(--walnut);
+            letter-spacing: 0.08em;
+        }
+
+        .footer-socials {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-socials a {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .footer-socials a:hover {
+            color: var(--burnt-orange);
+        }
+
+        .footer-copy {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 1.2rem;
+        }
+
+        .footer-powered {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .footer-powered a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-powered a:hover {
+            color: var(--burnt-orange);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            main {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .retro-nav {
+                padding: 0.7rem 1rem;
+            }
+
+            .retro-nav ul {
+                display: none;
+            }
+
+            .cta-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="retro-nav">
+        <a href="/" class="brand">{{ Configs.ctf_name | upper }}</a>
+        <ul>
+            <li><a href="/challenges"><i class="fas fa-flag me-1"></i> Challenges</a></li>
+            <li><a href="/scoreboard"><i class="fas fa-trophy me-1"></i> Scoreboard</a></li>
+            <li><a href="/login"><i class="fas fa-sign-in-alt me-1"></i> Login</a></li>
+            <li><a href="/register"><i class="fas fa-user-plus me-1"></i> Register</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- ── HERO ── -->
+        <section class="hero">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <div class="dot"></div>
+                    Live Registration Open
+                </div>
+
+                <h1 class="hero-title">{{ Configs.ctf_name }}</h1>
+
+                <p class="hero-tagline">
+                    {{ Configs.ctf_description or "Crack the code. Find the flag. Prove your skills." }}
+                </p>
+
+                <div class="cta-group">
+                    <div class="cta-row">
+                        <a href="/challenges" class="btn-retro btn-primary-retro">
+                            <i class="fas fa-flag"></i> Enter Arena
+                        </a>
+                        <a href="/login" class="btn-retro btn-secondary-retro">
+                            <i class="fas fa-user-circle"></i> Login / Register
+                        </a>
+                    </div>
+                    <div class="cta-row">
+                        <a href="/scoreboard" class="btn-retro btn-sm-retro">
+                            <i class="fas fa-trophy"></i> Scoreboard
+                        </a>
+                        <a href="https://forms.office.com/pages/responsepage.aspx?id=o835AF4H5USqC6ujrdZTn8HBz3NoPdZAoEjfGvKrrvdUNVlERDUwMURCSjRSQUxCQVlOVjlYT0pMWS4u&origin=QRCode&route=shorturl"
+                            target="_blank" class="btn-retro btn-sm-retro">
+                            <i class="fas fa-clipboard-list"></i> Register Now
+                        </a>
+                    </div>
+                </div>
+
+                <div class="countdown-row">
+                    <div class="countdown-unit"><span class="countdown-num" id="days">00</span><span
+                            class="countdown-label">Days</span></div>
+                    <div class="countdown-unit"><span class="countdown-num" id="hours">00</span><span
+                            class="countdown-label">Hours</span></div>
+                    <div class="countdown-unit"><span class="countdown-num" id="minutes">00</span><span
+                            class="countdown-label">Mins</span></div>
+                    <div class="countdown-unit"><span class="countdown-num" id="seconds">00</span><span
+                            class="countdown-label">Secs</span></div>
+                </div>
+            </div>
+
+            <!-- Big cassette tape illustration -->
+            <div class="hero-visual">
+                <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Tape body -->
+                    <rect x="10" y="20" width="400" height="240" rx="18" fill="#3b2a1e" stroke="#c4a962"
+                        stroke-width="2" />
+                    <!-- Inner window -->
+                    <rect x="30" y="40" width="360" height="200" rx="10" fill="#efe2c6" />
+                    <!-- Left reel group (spins via JS) -->
+                    <g id="reel-left" style="transform-origin:130px 140px">
+                        <circle cx="130" cy="140" r="70" fill="#d2b48c" stroke="#3b2a1e" stroke-width="3" />
+                        <circle cx="130" cy="140" r="48" fill="#3b2a1e" />
+                        <circle cx="130" cy="140" r="25" fill="#c4a962" />
+                        <circle cx="130" cy="140" r="9" fill="#3b2a1e" />
+                        <line x1="130" y1="92" x2="130" y2="115" stroke="#c4a962" stroke-width="3" />
+                        <line x1="157" y1="100" x2="145" y2="120" stroke="#c4a962" stroke-width="3" />
+                        <line x1="168" y1="120" x2="148" y2="130" stroke="#c4a962" stroke-width="3" />
+                        <line x1="168" y1="160" x2="148" y2="150" stroke="#c4a962" stroke-width="3" />
+                        <line x1="157" y1="180" x2="145" y2="160" stroke="#c4a962" stroke-width="3" />
+                        <line x1="103" y1="100" x2="115" y2="120" stroke="#c4a962" stroke-width="3" />
+                    </g>
+                    <!-- Right reel group -->
+                    <g id="reel-right" style="transform-origin:290px 140px">
+                        <circle cx="290" cy="140" r="70" fill="#d2b48c" stroke="#3b2a1e" stroke-width="3" />
+                        <circle cx="290" cy="140" r="48" fill="#3b2a1e" />
+                        <circle cx="290" cy="140" r="25" fill="#c4a962" />
+                        <circle cx="290" cy="140" r="9" fill="#3b2a1e" />
+                        <line x1="290" y1="92" x2="290" y2="115" stroke="#c4a962" stroke-width="3" />
+                        <line x1="317" y1="100" x2="305" y2="120" stroke="#c4a962" stroke-width="3" />
+                        <line x1="328" y1="120" x2="308" y2="130" stroke="#c4a962" stroke-width="3" />
+                        <line x1="328" y1="160" x2="308" y2="150" stroke="#c4a962" stroke-width="3" />
+                        <line x1="263" y1="100" x2="275" y2="120" stroke="#c4a962" stroke-width="3" />
+                    </g>
+                    <!-- Label window -->
+                    <rect x="145" y="70" width="130" height="60" rx="4" fill="#2f8f9d" opacity="0.35" />
+                    <text x="210" y="96" text-anchor="middle" font-family="Special Elite, Georgia, serif" font-size="10"
+                        fill="#3b2a1e" letter-spacing="3">SIDE A</text>
+                    <text x="210" y="112" text-anchor="middle" font-family="Courier Prime, monospace" font-size="7"
+                        fill="#3b2a1e" opacity="0.7">EXPLOIT · ZERO</text>
+                    <!-- Tape path -->
+                    <path d="M180,140 Q210,155 240,140" stroke="#3b2a1e" stroke-width="2" fill="none" opacity="0.3" />
+                    <!-- Bottom label -->
+                    <text x="210" y="265" text-anchor="middle" font-family="Special Elite, Georgia, serif"
+                        font-size="12" fill="#c4a962" letter-spacing="8">HACK THE WORLD</text>
+                    <!-- Corner screws -->
+                    <circle cx="25" cy="35" r="6" fill="#c4a962" opacity="0.6" />
+                    <circle cx="395" cy="35" r="6" fill="#c4a962" opacity="0.6" />
+                    <circle cx="25" cy="245" r="6" fill="#c4a962" opacity="0.6" />
+                    <circle cx="395" cy="245" r="6" fill="#c4a962" opacity="0.6" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- ── CATEGORIES ── -->
+        <section>
+            <h2 class="section-heading">Challenge Categories</h2>
+            <p class="section-sub">Test your skills across multiple domains of cybersecurity</p>
+            <div class="category-grid">
+                <div class="category-tag"><i class="fas fa-globe" style="color:#2f8f9d"></i> Web</div>
+                <div class="category-tag"><i class="fas fa-key" style="color:#8b2e2e"></i> Crypto</div>
+                <div class="category-tag"><i class="fas fa-microchip" style="color:#c56a2d"></i> Pwn</div>
+                <div class="category-tag"><i class="fas fa-bug" style="color:#3fb8af"></i> Reverse</div>
+                <div class="category-tag"><i class="fas fa-search" style="color:#c4a962"></i> Forensics</div>
+                <div class="category-tag"><i class="fas fa-puzzle-piece" style="color:#e76f51"></i> Misc</div>
+                <div class="category-tag"><i class="fas fa-user-secret" style="color:#2f8f9d"></i> OSINT</div>
+                <div class="category-tag"><i class="fas fa-map-marked-alt" style="color:#c56a2d"></i> GeoSINT</div>
+            </div>
+        </section>
+
+        <!-- ── INFO CARDS ── -->
+        <div class="info-grid">
+            <div class="info-card">
+                <span class="card-icon">📅</span>
+                <div class="card-label">Timeline</div>
+                <div class="card-value">{{ Configs.ctf_start | date }}</div>
+                <div class="card-sub">Event Date</div>
+            </div>
+            <div class="info-card">
+                <span class="card-icon">📍</span>
+                <div class="card-label">Location</div>
+                <div class="card-value" style="font-size:1.15rem;">Online / On-site</div>
+                <div class="card-sub">Global</div>
+            </div>
+            <div class="info-card">
+                <span class="card-icon">🎮</span>
+                <div class="card-label">Format</div>
+                <div class="card-value">Jeopardy</div>
+                <div class="card-sub">24 Hours · Style</div>
+            </div>
+            <div class="info-card prize-card">
+                <div class="trophies">🏆</div>
+                <span class="card-icon" style="font-size:1.5rem;">★</span>
+                <div class="card-label">Prize Pool</div>
+                <div class="card-value">$14,000+</div>
+                <div class="card-sub">Cash · Vouchers · Swag</div>
+            </div>
+            <div class="info-card intern-card">
+                <div class="intern-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="card-label">Opportunity</div>
+                <div class="card-value" style="font-size:1.15rem;">Internships</div>
+                <div class="card-sub">Direct interviews with top cyber firms for high performers</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── FOOTER ── -->
+    <footer class="retro-footer">
+        <div class="footer-label">Powered by</div>
+        <div class="footer-brand">
+            <i class="fas fa-shield-alt" style="color:var(--burnt-orange); margin-right:0.4rem;"></i>
+            {{ Configs.ctf_name | upper }}
+        </div>
+        <div class="footer-socials">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <p class="footer-copy">&copy; {{ date_format(now(), "%Y") }} {{ Configs.ctf_name }}. All systems operational.
+        </p>
+        <p class="footer-powered">
+            <a href="https://github.com/PraneeshRV/CTFd-stargaze-theme" target="_blank">Stargaze Theme</a>
+            &nbsp;·&nbsp;
+            <a href="https://ctfd.io" target="_blank">Powered by CTFd</a>
+        </p>
+    </footer>
+
+    <script>
+        // ── Countdown Timer ──
+        (function () {
+            const ctfStartTime = {{ Configs.start | int
+        }} * 1000;
+        const countDownDate = ctfStartTime > 0 ? ctfStartTime : Date.now() + 86400000;
+        const fmt = n => String(n).padStart(2, '0');
+
+        function update() {
+            const dist = countDownDate - Date.now();
+            const d = Math.max(0, Math.floor(dist / 86400000));
+            const h = Math.max(0, Math.floor((dist % 86400000) / 3600000));
+            const m = Math.max(0, Math.floor((dist % 3600000) / 60000));
+            const s = Math.max(0, Math.floor((dist % 60000) / 1000));
+            document.getElementById('days').textContent = fmt(d);
+            document.getElementById('hours').textContent = fmt(h);
+            document.getElementById('minutes').textContent = fmt(m);
+            document.getElementById('seconds').textContent = fmt(s);
+        }
+        update();
+        setInterval(update, 1000);
+        }) ();
+
+        // ── Reel spin anim (SVG CSS) ──
+        const reelStyle = document.createElement('style');
+        reelStyle.textContent = `
+          @keyframes reel-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+          #reel-left  { animation: reel-spin 5s linear infinite; }
+          #reel-right { animation: reel-spin 5s linear infinite reverse; }
+        `;
+        document.head.appendChild(reelStyle);
+    </script>
+</body>
+
+</html>
