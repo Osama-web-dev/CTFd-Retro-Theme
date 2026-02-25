@@ -952,14 +952,14 @@
       'csrfNonce': "{{ Session.nonce }}",
       'userMode': "{{ Configs.user_mode }}",
       'userId': {{ Session.id }},
-    'userName': { { User.name | tojson } },
-    'userEmail': { { User.email | tojson } },
-    'userVerified': { { User.verified | tojson } },
-    'teamId': { { Team.id | tojson } },
-    'teamName': { { Team.name | tojson } },
-    'start': { { Configs.start | tojson } },
-    'end': { { Configs.end | tojson } },
-    'themeSettings': { { Configs.theme_settings | tojson } },
+    'userName': {{ User.name | tojson }},
+    'userEmail': {{ User.email | tojson }},
+    'userVerified': {{ User.verified | tojson }},
+    'teamId': {{ Team.id | tojson }},
+    'teamName': {{ Team.name | tojson }},
+    'start': {{ Configs.start | tojson }},
+    'end': {{ Configs.end | tojson }},
+    'themeSettings': {{ Configs.theme_settings | tojson }},
     'eventSounds': [
       "{{ url_for('views.themes', theme='core', path='sounds/notification.webm') }}",
       "{{ url_for('views.themes', theme='core', path='sounds/notification.mp3') }}",
@@ -1005,9 +1005,7 @@
 
       60% {
         opacity: 0.85;
-        transform: scale(1.08);
-      }
-    }
+        transform: scale(1.08); }}
   </style>
 
   {% block navbar %}
